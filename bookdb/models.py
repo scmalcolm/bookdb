@@ -16,6 +16,11 @@ from sqlalchemy.orm import (
 
 from zope.sqlalchemy import ZopeTransactionExtension
 
+from pyramid.security import (
+    Allow,
+    Everyone,
+    )
+
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
 
@@ -129,3 +134,11 @@ class OrderEntry(Base):
         self.order = order
         self.book = book
         self.quantity = quantity
+
+
+class RootFactory(object):
+    __acl__ = [(Allow, Everyone, 'view'),
+               (Allow, 'group:editors', 'edit')]
+
+    def __init__(self, request):
+        pass
