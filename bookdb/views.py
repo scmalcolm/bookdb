@@ -32,7 +32,7 @@ def front_page(request):
     pass
 
 
-@view_config(route_name='view_book', renderer='templates/view_book.pt')
+@view_config(route_name='view_book', renderer='templates/single_book.pt')
 def view_book(request):
     isbn13 = request.matchdict['isbn13']
     book = DBSession.query(Book).filter_by(isbn13=isbn13).first()
@@ -42,10 +42,11 @@ def view_book(request):
     return dict(book=book,
                 edit_url=edit_url,
                 logged_in=authenticated_userid(request),
+                readonly=True,
                 )
 
 
-@view_config(route_name='edit_book', renderer='templates/edit_book.pt', permission='edit')
+@view_config(route_name='edit_book', renderer='templates/single_book.pt', permission='edit')
 def edit_book(request):
     isbn13 = request.matchdict['isbn13']
     book = DBSession.query(Book).filter_by(isbn13=isbn13).one()
@@ -56,6 +57,7 @@ def edit_book(request):
     return dict(book=book,
                 save_url=request.route_url('edit_book', isbn13=isbn13),
                 logged_in=authenticated_userid(request),
+                readonly=False,
                 )
 
 
