@@ -80,6 +80,9 @@ class Distributor(Base):
         else:
             self.full_name = full_name
 
+    def __repr__(self):
+        return self.short_name
+
 
 class Publisher(Base):
     __tablename__ = 'publishers'
@@ -94,6 +97,9 @@ class Publisher(Base):
         else:
             self.full_name = full_name
 
+    def __repr__(self):
+        return self.short_name
+
 
 class ShelfLocation(Base):
     __tablename__ = 'shelf_locations'
@@ -102,6 +108,9 @@ class ShelfLocation(Base):
 
     def __init__(self, location):
         self.location = location
+
+    def __repr__(self):
+        return self.location
 
 
 class Binding(Base):
@@ -112,6 +121,9 @@ class Binding(Base):
     def __init__(self, binding):
         self.binding = binding
 
+    def __repr__(self):
+        return self.binding
+
 
 class ShippingMethod(Base):
     __tablename__ = 'shipping_methods'
@@ -120,6 +132,9 @@ class ShippingMethod(Base):
 
     def __init__(self, shipping_method):
         self.shipping_method = shipping_method
+
+    def __repr__(self):
+        return self.shipping_method
 
 
 class OrderEntry(Base):

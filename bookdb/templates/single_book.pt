@@ -54,13 +54,13 @@
                 value="${book.author_name}"/><br/>
             <label for="publisher">Publisher</label>
             <input id="publisher" type="text" readonly="${readonly}"
-                value="${book.publisher.short_name}"/><br/>
+                value="${book.publisher}"/><br/>
             <label for="binding">Binding</label>
             <input id="binding" type="text" readonly="${readonly}"
-                value="${book.binding.binding}"/><br/>
+                value="${book.binding}"/><br/>
             <label for="location">Location</label>
             <input id="location" type="text" readonly="${readonly}"
-                value="${book.shelf_location.location}"/><br/>
+                value="${book.shelf_location}"/><br/>
         </form>
       </div>
     </div>
