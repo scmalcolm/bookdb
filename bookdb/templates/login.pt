@@ -3,19 +3,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
       xmlns:tal="http://xml.zope.org/namespaces/tal">
 <head>
-  <title>Login - Pyramid tutorial wiki (based on TurboGears
-    20-Minute Wiki)</title>
+  <title>Login - BMBR Book Database</title>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
   <meta name="keywords" content="python web application" />
   <meta name="description" content="pyramid web application" />
   <link rel="shortcut icon"
-        href="${request.static_url('tutorial:static/favicon.ico')}" />
+        href="${request.static_url('bookdb:static/favicon.ico')}" />
   <link rel="stylesheet"
-        href="${request.static_url('tutorial:static/pylons.css')}"
+        href="${request.static_url('bookdb:static/pylons.css')}"
         type="text/css" media="screen" charset="utf-8" />
   <!--[if lte IE 6]>
   <link rel="stylesheet"
-        href="${request.static_url('tutorial:static/ie6.css')}"
+        href="${request.static_url('bookdb:static/ie6.css')}"
         type="text/css" media="screen" charset="utf-8" />
   <![endif]-->
 </head>
@@ -25,7 +24,7 @@
       <div class="top-small align-center">
         <div>
           <img width="220" height="50" alt="pyramid"
-        src="${request.static_url('tutorial:static/pyramid-small.png')}" />
+        src="${request.static_url('bookdb:static/pyramid-small.png')}" />
         </div>
       </div>
     </div>
