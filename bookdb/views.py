@@ -42,7 +42,7 @@ def view_book(request):
     return dict(book=book,
                 edit_url=edit_url,
                 logged_in=authenticated_userid(request),
-                readonly=True,
+                editable=False,
                 )
 
 
@@ -54,10 +54,16 @@ def edit_book(request):
         # TODO: get updated data from request and update the book object
         DBSession.add(book)
         return HTTPFound(location=request.route_url(view_book, isbn13=isbn13))
+    bindings = DBSession.query(Binding).all()
+    locations = DBSession.query(ShelfLocation).all()
+    publishers = DBSession.query(Publisher).all()
     return dict(book=book,
                 save_url=request.route_url('edit_book', isbn13=isbn13),
                 logged_in=authenticated_userid(request),
-                readonly=False,
+                editable=True,
+                bindings=bindings,
+                locations=locations,
+                publishers=publishers,
                 )
 
 
