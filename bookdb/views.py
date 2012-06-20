@@ -1,3 +1,5 @@
+import datetime
+
 from pyramid.httpexceptions import (
     HTTPFound,
     HTTPNotFound,
@@ -90,6 +92,32 @@ def list_orders(request):
     orders = DBSession.query(Order).all()
     return dict(orders=orders,
                 logged_in=authenticated_userid,
+                )
+
+
+@view_config(route_name="edit_order", renderer='templates/edit_order.pt', permission='edit')
+def edit_order(request):
+    po = request.matchdict['po']
+    order = DBSession.query(Order).filter_by(po=po).one()
+    if 'header.submitted' in request.params:
+        po = request.params['po']
+        order_date = request.params['order_date']
+        # TODO: validate new header data
+        return HTTPNotFound(order_date)
+    if 'new_entry.submitted' in request.params:
+        book = DBSession.query(Book).filter_by(isbn13=request.params['isbn13']).one()
+        quantity = request.params['quantity']
+        ## TODO: validate the new entry
+        entry = OrderEntry(order, book, quantity)
+        DBSession.add(entry)
+        return HTTPFound(location=request.route_url('edit_order', po=po))
+    shipping_methods = DBSession.query(ShippingMethod).all()
+    distributors = DBSession.query(Distributor).all()
+    return dict(order=order,
+                save_url=request.route_url('edit_order', po=po),
+                logged_in=authenticated_userid(request),
+                shipping_methods=shipping_methods,
+                distributors=distributors,
                 )
 
 

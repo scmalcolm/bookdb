@@ -26,5 +26,6 @@ def main(global_config, **settings):
     config.add_route('view_book', '/book/{isbn13}')
     config.add_route('edit_book', '/book/{isbn13}/edit')
     config.add_route('list_orders', '/order/list')
+    config.add_route('edit_order', '/order/{po}/edit')
     config.scan()
     return config.make_wsgi_app()

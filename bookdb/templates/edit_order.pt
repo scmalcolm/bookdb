@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+<head>
+  <title>BMBR Book Database</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+  <meta name="keywords" content="python web application" />
+  <meta name="description" content="pyramid web application" />
+  <link rel="shortcut icon"
+        href="${request.static_url('bookdb:static/favicon.ico')}" />
+  <link rel="stylesheet"
+        href="${request.static_url('bookdb:static/pylons.css')}"
+        type="text/css" media="screen" charset="utf-8" />
+  <!--[if lte IE 6]>
+  <link rel="stylesheet"
+        href="${request.static_url('bookdb:static/ie6.css')}"
+        type="text/css" media="screen" charset="utf-8" />
+  <![endif]-->
+</head>
+<body>
+  <div id="wrap">
+    <div id="top-small">
+      <div class="top-small align-center">
+        <div>
+          <img width="220" height="50" alt="pyramid"
+        src="${request.static_url('bookdb:static/pyramid-small.png')}" />
+        </div>
+      </div>
+    </div>
+    <div id="middle">
+      <div class="middle align-right">
+        <div id="left" class="app-welcome align-left">
+          <b>Edit an Order</b><br/>
+        </div>
+        <div id="right" class="app-welcome align-right">
+          <span tal:condition="logged_in">
+            <a href="${request.application_url}/logout">Logout</a>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div id="bottom">
+      <div class="bottom">
+        <div class="order-header">
+          <form action="${save_url}" method="post">
+            <div>PO <input name="po" type="text" value="${order.po}"/></div>
+            <div>Distributor
+              <select>
+                <option tal:repeat="distributor distributors"
+                    tal:attributes="selected 'selected' if
+                     distributor is order.distributor else None">
+                  <span tal:replace="distributor">Binding</span>
+                </option>
+              </select>
+            </div>
+            <div>Date <input name="order_date" type="date" value="${order.date}"/></div>
+            <div>Special Instructions <input name="comment" type="text" value="${order.comment}"/></div>
+            <input name="header.submitted" type="submit" method="save" value="Save Order Header"/>
+          </form>
+        </div>
+        <div class="order-entries">
+          <table>
+            <thead>
+              <tr>
+                <th>Qty</th>
+                <th>ISBN</th>
+                <th>Title</th>
+                <th>Publisher</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr tal:repeat="entry order.order_entries">
+                <td tal:content="entry.quantity">#</td>
+                <td tal:content="entry.book.isbn13">isbn</td>
+                <td tal:content="entry.book.title">book title</td>
+                <td tal:content="entry.book.publisher">publisher</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <form action="${save_url}" method="post">
+              <tr>
+                <td><input name="quantity" type="text"/></td>
+                <td><input name="isbn13" type="text" maxlength="13"/></td>
+                <td><input name="new_entry.submitted" type="submit" method="save" value="Add Entry"/></td>
+              </tr>
+              </form>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="footer">
+    <div class="footer"
+         >&copy; Copyright 2008-2011, Agendaless Consulting.</div>
+  </div>
+</body>
+</html>
