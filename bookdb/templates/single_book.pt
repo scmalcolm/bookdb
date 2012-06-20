@@ -47,18 +47,18 @@
         <form tal:attributes="action None if not editable else save_url"
           method="post">
             <label for="isbn">ISBN</label>
-            <input id="isbn" type="text" tal:attributes="readonly readonly"
+            <input id="isbn" name="isbn13" type="text" tal:attributes="readonly readonly"
                 value="${book.isbn13}"/><br/>
             <label for="title">Title</label>
-            <input id="title" type="text" tal:attributes="readonly readonly"
+            <input id="title" name="title" type="text" tal:attributes="readonly readonly"
                 value="${book.title}"/><br/>
             <label for="author">Author</label>
-            <input id="author" type="text" tal:attributes="readonly readonly"
+            <input id="author" name="author_name" type="text" tal:attributes="readonly readonly"
                 value="${book.author_name}"/><br/>
             <label for="publisher">Publisher</label>
             <input id="publisher" type="text" readonly="readonly"
                 value="${book.publisher}" tal:condition="not editable"/>
-            <select id="publisher" tal:condition="editable">
+            <select id="publisher" name="publisher" tal:condition="editable">
               <option tal:repeat="pub publishers"
                 tal:attributes="selected 'selected' if pub is book.publisher else None">
                 <span tal:replace="pub">Publisher Name</span>
@@ -67,7 +67,7 @@
             <label for="binding">Binding</label>
             <input id="binding" type="text" readonly="readonly"
                 value="${book.binding}" tal:condition="not editable"/>
-            <select id="binding" tal:condition="editable">
+            <select id="binding" name="binding" tal:condition="editable">
               <option tal:repeat="bind bindings"
                 tal:attributes="selected 'selected' if bind is book.binding else None">
                 <span tal:replace="bind">Binding</span>
@@ -76,13 +76,17 @@
             <label for="location">Location</label>
             <input id="location" type="text" readonly="readonly"
                 value="${book.shelf_location}" tal:condition="not editable"/>
-            <select id="location" tal:condition="editable">
+            <select id="location" name="shelf_location" tal:condition="editable">
               <option tal:repeat="loc locations"
                 tal:attributes="selected 'selected' if loc is book.shelf_location else None">
                 <span tal:replace="loc">Shelf Location</span>
               </option>
             </select><br/>
-            <input type="submit" name="form.submitted" value="Save"/>
+            <input type="submit" name="form.submitted" value="Save"
+              tal:condition="editable"/>
+            <a href="edit"
+              tal:attributes="href edit_url" tal:condition="not editable">
+              Edit this Book</a>
         </form>
       </div>
     </div>

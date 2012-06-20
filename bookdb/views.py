@@ -51,9 +51,18 @@ def edit_book(request):
     isbn13 = request.matchdict['isbn13']
     book = DBSession.query(Book).filter_by(isbn13=isbn13).one()
     if 'form.submitted' in request.params:
-        # TODO: get updated data from request and update the book object
+        # TODO: Validate data before accepting it.
+        book.isbn13 = request.params['isbn13']
+        book.title = request.params['title']
+        book.author_name = request.params['author_name']
+        book.publisher = DBSession.query(Publisher).filter_by(
+                            short_name=request.params['publisher']).one()
+        book.binding = DBSession.query(Binding).filter_by(
+                            binding=request.params['binding']).one()
+        book.shelf_location = DBSession.query(ShelfLocation).filter_by(
+                            location=request.params['shelf_location']).one()
         DBSession.add(book)
-        return HTTPFound(location=request.route_url(view_book, isbn13=isbn13))
+        return HTTPFound(location=request.route_url('view_book', isbn13=book.isbn13))
     bindings = DBSession.query(Binding).all()
     locations = DBSession.query(ShelfLocation).all()
     publishers = DBSession.query(Publisher).all()
