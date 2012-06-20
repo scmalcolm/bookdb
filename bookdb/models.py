@@ -56,7 +56,7 @@ class Order(Base):
     date = Column(Date)
     comment = Column(Text)
     order_entries = relationship("OrderEntry", back_populates="order")
-    distributors = relationship("Distributor")
+    distributor = relationship("Distributor")
     shipping_method = relationship("ShippingMethod")
 
     def __init__(self, po, date, distributor, shipping_method, comment):
