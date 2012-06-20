@@ -1,6 +1,3 @@
-import re
-from docutils.core import publish_parts
-
 from pyramid.httpexceptions import (
     HTTPFound,
     HTTPNotFound,
@@ -22,6 +19,10 @@ from .models import (
     ShelfLocation,
     Binding,
     Publisher,
+    Order,
+    OrderEntry,
+    ShippingMethod,
+    Distributor,
     )
 
 from .security import USERS
@@ -81,6 +82,14 @@ def list_books(request):
     books = DBSession.query(Book).all()
     return dict(books=books,
                 logged_in=authenticated_userid(request),
+                )
+
+
+@view_config(route_name="list_orders", renderer='templates/order_list.pt')
+def list_orders(request):
+    orders = DBSession.query(Order).all()
+    return dict(orders=orders,
+                logged_in=authenticated_userid,
                 )
 
 
