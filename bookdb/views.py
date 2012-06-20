@@ -27,7 +27,7 @@ from .models import (
 from .security import USERS
 
 
-@view_config(route_name='front_page', renderer=';templates/front_page.pt')
+@view_config(route_name='front_page', renderer='templates/front_page.pt')
 def front_page(request):
     pass
 
@@ -64,6 +64,14 @@ def edit_book(request):
                 bindings=bindings,
                 locations=locations,
                 publishers=publishers,
+                )
+
+
+@view_config(route_name='list_books', renderer='templates/book_list.pt')
+def list_books(request):
+    books = DBSession.query(Book).all()
+    return dict(books=books,
+                logged_in=authenticated_userid(request),
                 )
 
 
