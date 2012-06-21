@@ -140,6 +140,16 @@ def list_orders(request):
                 )
 
 
+@view_config(route_name="view_order", renderer='templates/view_order.pt')
+def function(request):
+    po = request.matchdict['po']
+    order = DBSession.query(Order).filter_by(po=po).one()
+    return dict(order=order,
+                edit_url=request.route_url('edit_order', po=po),
+                logged_in=authenticated_userid(request),
+                )
+
+
 @view_config(route_name="edit_order", renderer='templates/edit_order.pt', permission='edit')
 def edit_order(request):
     po = request.matchdict['po']

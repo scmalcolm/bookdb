@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+<head>
+  <title>BMBR Book Database</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+  <meta name="keywords" content="python web application" />
+  <meta name="description" content="pyramid web application" />
+  <link rel="shortcut icon"
+        href="${request.static_url('bookdb:static/favicon.ico')}" />
+  <link rel="stylesheet"
+        href="${request.static_url('bookdb:static/pylons.css')}"
+        type="text/css" media="screen" charset="utf-8" />
+  <!--[if lte IE 6]>
+  <link rel="stylesheet"
+        href="${request.static_url('bookdb:static/ie6.css')}"
+        type="text/css" media="screen" charset="utf-8" />
+  <![endif]-->
+</head>
+<body>
+  <div id="wrap">
+    <div id="top-small">
+      <div class="top-small align-center">
+        <div>
+          <img width="220" height="50" alt="pyramid"
+        src="${request.static_url('bookdb:static/pyramid-small.png')}" />
+        </div>
+      </div>
+    </div>
+    <div id="middle">
+      <div class="middle align-right">
+        <div id="left" class="app-welcome align-left">
+          <b>Edit an Order</b><br/>
+        </div>
+        <div id="right" class="app-welcome align-right">
+          <span tal:condition="logged_in">
+            <a href="${request.application_url}/logout">Logout</a>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div id="bottom">
+      <div class="bottom">
+        <div class="order-header">
+          <label>PO 
+            <input type="text" value="${order.po}" readonly="readonly"/>
+          </label><br/>
+          <label>Distributor
+            <input type="text" value="${order.distributor}" readonly="readonly"/>
+          </label><br/>
+          <label>Shipping Method
+            <input type="text" value="${order.shipping_method}" readonly="readonly"/>
+          </label><br/>
+          <label>Date 
+            <input type="date" value="${order.date}" readonly="readonly"/>
+          </label><br/>
+          <label>Special Instructions 
+            <input type="text" value="${order.comment}" readonly="readonly"/>
+          </label><br/>
+          <a href="${edit_url}">Edit Order</a>
+        </div>
+        <div class="order-entries">
+          <table>
+            <thead>
+              <tr>
+                <th>Qty</th>
+                <th>ISBN</th>
+                <th>Title</th>
+                <th>Publisher</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr tal:repeat="entry order.order_entries">
+                <td tal:content="entry.quantity">#</td>
+                <td tal:content="entry.book.isbn13">isbn</td>
+                <td tal:content="entry.book.title">book title</td>
+                <td tal:content="entry.book.publisher">publisher</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="footer">
+    <div class="footer"
+         >&copy; Copyright 2008-2011, Agendaless Consulting.</div>
+  </div>
+</body>
+</html>
