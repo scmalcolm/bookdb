@@ -44,18 +44,18 @@
       <div class="bottom">
         <div class="order-header">
           <form action="${save_url}" method="post">
-            <div>PO <input name="po" type="text" value="${order.po}"/></div>
-            <div>Distributor
-              <select>
+            <label>PO <input name="po" type="text" value="${order.po}"/></label><br/>
+            <label>Distributor
+              <select name="distributor">
                 <option tal:repeat="distributor distributors"
                     tal:attributes="selected 'selected' if
                      distributor is order.distributor else None">
-                  <span tal:replace="distributor">Binding</span>
+                  <span tal:replace="distributor">Distribution Company</span>
                 </option>
               </select>
-            </div>
-            <div>Date <input name="order_date" type="date" value="${order.date}"/></div>
-            <div>Special Instructions <input name="comment" type="text" value="${order.comment}"/></div>
+            </label><br/>
+            <label>Date <input name="order_date" type="date" value="${order.date}"/></label><br/>
+            <label>Special Instructions <input name="comment" type="text" value="${order.comment}"/></label><br/>
             <input name="header.submitted" type="submit" method="save" value="Save Order Header"/>
           </form>
         </div>
