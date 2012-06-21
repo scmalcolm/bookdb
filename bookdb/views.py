@@ -147,8 +147,19 @@ def edit_order(request):
     if 'header.submitted' in request.params:
         po = request.params['po']
         order_date = request.params['order_date']
+        distributor = DBSession.query(Distributor).filter_by(
+                        short_name=request.params['distributor']).one()
+        shipping_method = DBSession.query(ShippingMethod).filter_by(
+                        shipping_method=request.params['shipping_method']).one()
+        comment = request.params['comment']
         # TODO: validate new header data
-        return HTTPNotFound(order_date)
+        order.po = po
+        order.order_date = order_date
+        order.distributor = distributor
+        order.shipping_method = shipping_method
+        order.comment = comment
+        DBSession.add(order)
+        return HTTPFound(location=request.route_url('list_orders'))
     if 'new_entry.submitted' in request.params:
         book = DBSession.query(Book).filter_by(isbn13=request.params['isbn13']).one()
         quantity = request.params['quantity']

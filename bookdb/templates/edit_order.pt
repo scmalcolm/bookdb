@@ -54,6 +54,15 @@
                 </option>
               </select>
             </label><br/>
+            <label>Shipping Method
+              <select name="shipping_method">
+                <option tal:repeat="method shipping_methods"
+                    tal:attributes="selected 'selected' if
+                     method is order.shipping_method else None">
+                  <span tal:replace="method">Ship by Tortise</span>
+                </option>
+              </select>
+            </label><br/>
             <label>Date <input name="order_date" type="date" value="${order.date}"/></label><br/>
             <label>Special Instructions <input name="comment" type="text" value="${order.comment}"/></label><br/>
             <input name="header.submitted" type="submit" method="save" value="Save Order Header"/>
