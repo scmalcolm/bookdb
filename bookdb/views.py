@@ -32,7 +32,8 @@ from .security import USERS
 
 @view_config(route_name='front_page', renderer='templates/front_page.pt')
 def front_page(request):
-    pass
+    return dict(logged_in=authenticated_userid(request),
+                )
 
 
 @view_config(route_name='view_book', renderer='templates/single_book.pt')
@@ -107,6 +108,19 @@ def edit_book(request):
                 bindings=bindings,
                 locations=locations,
                 publishers=publishers,
+                )
+
+
+@view_config(route_name='delete_book', renderer='templates/delete_book.pt', permission='edit')
+def delete_book(request):
+    isbn13 = request.matchdict['isbn13']
+    book = DBSession.query(Book).filter_by(isbn13=isbn13).one()
+    if 'form.submitted' in request.params:
+        DBSession.delete(book)
+        return HTTPFound(location=request.route_url('list_books'))
+    return dict(book=book,
+                delete_url=request.route_url('delete_book', isbn13=isbn13),
+                logged_in=authenticated_userid(request),
                 )
 
 
