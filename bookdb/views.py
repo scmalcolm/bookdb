@@ -49,6 +49,37 @@ def view_book(request):
                 )
 
 
+@view_config(route_name='add_book', renderer='templates/single_book.pt', permission='edit')
+def add_book(request):
+    if 'form.submitted' in request.params:
+        isbn13 = request.params['isbn13']
+        title = request.params['title']
+        author_name = request.params['author_name']
+        publisher = DBSession.query(Publisher).filter_by(
+                            short_name=request.params['publisher']).one()
+        binding = DBSession.query(Binding).filter_by(
+                            binding=request.params['binding']).one()
+        shelf_location = DBSession.query(ShelfLocation).filter_by(
+                            location=request.params['shelf_location']).one()
+        # TODO: validate data
+        new_book = Book(isbn13, title, author_name, publisher, binding, shelf_location)
+        DBSession.add(new_book)
+        return HTTPFound(location=request.route_url('view_book', isbn13=isbn13))
+    save_url = request.route_url('add_book')
+    book = Book('', '', '', '', '', '')
+    bindings = DBSession.query(Binding).all()
+    locations = DBSession.query(ShelfLocation).all()
+    publishers = DBSession.query(Publisher).all()
+    return dict(book=book,
+                save_url=save_url,
+                logged_in=authenticated_userid(request),
+                editable=True,
+                bindings=bindings,
+                locations=locations,
+                publishers=publishers,
+                )
+
+
 @view_config(route_name='edit_book', renderer='templates/single_book.pt', permission='edit')
 def edit_book(request):
     isbn13 = request.matchdict['isbn13']
