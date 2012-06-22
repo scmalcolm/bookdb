@@ -84,6 +84,7 @@
                 <td tal:content="entry.book.isbn13">isbn</td>
                 <td tal:content="entry.book.title">book title</td>
                 <td tal:content="entry.book.publisher">publisher</td>
+                <td><a href="${delete_entry_pattern.format(po=order.po, isbn13=entry.book.isbn13)}">d</a></td>
               </tr>
             </tbody>
             <tfoot>

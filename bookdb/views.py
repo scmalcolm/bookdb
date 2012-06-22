@@ -184,6 +184,7 @@ def edit_order(request):
                 logged_in=authenticated_userid(request),
                 shipping_methods=shipping_methods,
                 distributors=distributors,
+                delete_entry_pattern=request.application_url + "/order/{po}/delete_entry/{isbn13}",
                 )
 
 
@@ -198,6 +199,17 @@ def delete_order(request):
                 delete_url=request.route_url('delete_order', po=po),
                 logged_in=authenticated_userid(request),
                 )
+
+
+@view_config(route_name='delete_order_entry', permission='edit')
+def delete_order_entry(request):
+    po = request.matchdict['po']
+    isbn13 = request.matchdict['isbn13']
+    order = DBSession.query(Order).filter_by(po=po).one()
+    book = DBSession.query(Book).filter_by(isbn13=isbn13).one()
+    order_entry = DBSession.query(OrderEntry).filter_by(order=order, book=book).one()
+    DBSession.delete(order_entry)
+    return HTTPFound(location=request.route_url('edit_order', po=po))
 
 
 @view_config(route_name='login', renderer='templates/login.pt')
