@@ -55,7 +55,7 @@ class Order(Base):
     po = Column(Text, unique=True)
     date = Column(Date)
     comment = Column(Text)
-    order_entries = relationship("OrderEntry", back_populates="order")
+    order_entries = relationship("OrderEntry", back_populates="order", cascade="all, delete-orphan")
     distributor = relationship("Distributor")
     shipping_method = relationship("ShippingMethod")
 

@@ -187,6 +187,19 @@ def edit_order(request):
                 )
 
 
+@view_config(route_name='delete_order', renderer='templates/delete_order.pt', permission='edit')
+def delete_order(request):
+    po = request.matchdict['po']
+    order = DBSession.query(Order).filter_by(po=po).one()
+    if 'form.submitted' in request.params:
+        DBSession.delete(order)
+        return HTTPFound(location=request.route_url('list_orders'))
+    return dict(order=order,
+                delete_url=request.route_url('delete_order', po=po),
+                logged_in=authenticated_userid(request),
+                )
+
+
 @view_config(route_name='login', renderer='templates/login.pt')
 @forbidden_view_config(renderer='templates/login.pt')
 def login(request):
