@@ -1,4 +1,4 @@
-import datetime
+from dateutil.parser import parse as parse_date
 
 from pyramid.httpexceptions import (
     HTTPFound,
@@ -150,13 +150,36 @@ def view_order(request):
                 )
 
 
+@view_config(route_name="add_order", renderer='templates/add_order.pt', permission='edit')
+def add_order(request):
+    if 'form.submitted' in request.params:
+        po = request.params['po']
+        distributor = DBSession.query(Distributor).filter_by(
+                            short_name=request.params['distributor']).one()
+        shipping_method = DBSession.query(ShippingMethod).filter_by(
+                            shipping_method=request.params['shipping_method']).one()
+        date = parse_date(request.params['order_date'])
+        comment = request.params['comment']
+        new_order = Order(po, date, distributor, shipping_method, comment)
+        DBSession.add(new_order)
+        return HTTPFound(request.route_url('edit_order', po=po))
+    save_url = request.route_url('add_order')
+    shipping_methods = DBSession.query(ShippingMethod).all()
+    distributors = DBSession.query(Distributor).all()
+    return dict(save_url=save_url,
+                logged_in=authenticated_userid(request),
+                shipping_methods=shipping_methods,
+                distributors=distributors,
+                )
+
+
 @view_config(route_name="edit_order", renderer='templates/edit_order.pt', permission='edit')
 def edit_order(request):
     po = request.matchdict['po']
     order = DBSession.query(Order).filter_by(po=po).one()
     if 'header.submitted' in request.params:
         po = request.params['po']
-        order_date = request.params['order_date']
+        order_date = parse_date(request.params['order_date'])
         distributor = DBSession.query(Distributor).filter_by(
                         short_name=request.params['distributor']).one()
         shipping_method = DBSession.query(ShippingMethod).filter_by(
