@@ -141,7 +141,7 @@ def list_orders(request):
 
 
 @view_config(route_name="view_order", renderer='templates/view_order.pt')
-def function(request):
+def view_order(request):
     po = request.matchdict['po']
     order = DBSession.query(Order).filter_by(po=po).one()
     return dict(order=order,
