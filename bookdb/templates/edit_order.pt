@@ -72,16 +72,16 @@
           <table>
             <thead>
               <tr>
-                <th>Qty</th>
                 <th>ISBN</th>
+                <th>Qty</th>
                 <th>Title</th>
                 <th>Publisher</th>
               </tr>
             </thead>
             <tbody>
               <tr tal:repeat="entry order.order_entries">
-                <td tal:content="entry.quantity">#</td>
                 <td tal:content="entry.book.isbn13">isbn</td>
+                <td tal:content="entry.quantity">#</td>
                 <td tal:content="entry.book.title">book title</td>
                 <td tal:content="entry.book.publisher">publisher</td>
                 <td><a href="${delete_entry_pattern.format(po=order.po, isbn13=entry.book.isbn13)}">d</a></td>
@@ -90,8 +90,8 @@
             <tfoot>
               <form action="${save_url}" method="post">
               <tr>
+                <td><input name="isbn13" type="text" maxlength="13" autofocus="autofocus"/></td>
                 <td><input name="quantity" type="text"/></td>
-                <td><input name="isbn13" type="text" maxlength="13"/></td>
                 <td><input name="new_entry.submitted" type="submit" method="save" value="Add Entry"/></td>
               </tr>
               </form>
