@@ -15,6 +15,7 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'python-dateutil',
+    'reportlab',
     ]
 
 setup(name='bookdb',
