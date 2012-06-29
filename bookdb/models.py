@@ -33,7 +33,7 @@ class Book(Base):
     publisher_id = Column(Integer, ForeignKey('publishers.id'))
     isbn13 = Column(Text, unique=True)
     title = Column(Text)
-    author_name = Column(Text)
+    author_name = Column(Text)  # use format 'last1, first1; last2, first2; ...'
     publisher = relationship("Publisher")
     shelf_location = relationship("ShelfLocation")
     binding = relationship("Binding")
@@ -45,6 +45,11 @@ class Book(Base):
         self.publisher = publisher
         self.binding = binding
         self.shelf_location = shelf_location
+
+    def author_lastname(self):
+        authors = self.author_name.split(';')
+        author = authors[0].split(',')
+        return author[0]
 
 
 class Order(Base):
