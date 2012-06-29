@@ -2,6 +2,7 @@ from sqlalchemy import (
     Column,
     Integer,
     Text,
+    String,
     Date,
     ForeignKey,
     )
@@ -77,6 +78,17 @@ class Distributor(Base):
     id = Column(Integer, primary_key=True)
     short_name = Column(Text, unique=True)
     full_name = Column(Text)
+    account_number = Column(Text)
+    sales_rep = Column(Text)
+    phone = Column(Text)
+    fax = Column(Text)
+    email = Column(Text)
+    address1 = Column(String)
+    address2 = Column(String)
+    city = Column(String)
+    province = Column(String)
+    postal_code = Column(String)
+    country = Column(String)
 
     def __init__(self, short_name, full_name=None):
         self.short_name = short_name
