@@ -30,6 +30,7 @@ def main(global_config, **settings):
     config.add_route('list_orders', '/order/list')
     config.add_route('add_order', '/order/add')
     config.add_route('view_order', '/order/{po}')
+    config.add_route('make_order_pdf', '/order/{po}/pdf')
     config.add_route('edit_order', '/order/{po}/edit')
     config.add_route('delete_order', '/order/{po}/delete')
     config.add_route('delete_order_entry', '/order/{po}/delete_entry/{isbn13}')

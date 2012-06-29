@@ -27,6 +27,8 @@ from .models import (
     Distributor,
     )
 
+from .printing import generate_order_pdf
+
 from .security import USERS
 
 
@@ -146,8 +148,18 @@ def view_order(request):
     order = DBSession.query(Order).filter_by(po=po).one()
     return dict(order=order,
                 edit_url=request.route_url('edit_order', po=po),
+                pdf_url=request.route_url('make_order_pdf', po=po),
                 logged_in=authenticated_userid(request),
                 )
+
+
+@view_config(route_name='make_order_pdf')
+def make_order_pdf(request):
+    po = request.matchdict['po']
+    order = DBSession.query(Order).filter_by(po=po).one()
+    filename = '/Users/bmbr/dev/{}.pdf'.format(po)
+    generate_order_pdf(order, filename)
+    return HTTPFound(location=request.route_url('view_order', po=po))
 
 
 @view_config(route_name="add_order", renderer='templates/add_order.pt', permission='edit')

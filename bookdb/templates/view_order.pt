@@ -59,6 +59,7 @@
             <input type="text" value="${order.comment}" readonly="readonly"/>
           </label><br/>
           <a href="${edit_url}">Edit Order</a>
+          <a href="${pdf_url}">Make PDF</a>
         </div>
         <div class="order-entries">
           <table>
