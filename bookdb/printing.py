@@ -1,4 +1,5 @@
 from reportlab.lib import pagesizes
+from reportlab.pdfgen import canvas
 from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Table, NextPageTemplate
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import cm
@@ -28,9 +29,22 @@ def generate_order_pdf(order, filename=_default_filename):
     doc = BaseDocTemplate(filename, pagesize=PAGESIZE, pageTemplates=[firstpage, laterpages])
     story = [NextPageTemplate('later')]
 
-    # TODO: get order data
+    columns = [0.75 * cm, 2.75 * cm, 6 * cm, 3.5 * cm, 3 * cm, 1.5 * cm]
+    data = [['Qty', 'ISBN', 'Title', 'Author', 'Publisher', 'Binding']]
+    for entry in order.order_entries:
+        row = [
+            entry.quantity,
+            entry.book.isbn13,
+            entry.book.title,
+            entry.book.author_lastname(),
+            entry.book.publisher,
+            entry.book.binding,
+            ]
+        data.append(row)
+    table = Table(data, colWidths=columns, repeatRows=1)
+    story.append(table)
 
-    doc.build(story)
+    doc.build(story, canvasmaker=NumberedCanvas)
 
 
 def create_text_object(canv, x, y, text, style, align='left'):
@@ -74,8 +88,9 @@ class FirstPageTemplate(PageTemplate):
         self.order = order
         PageTemplate.__init__(self, id='first', frames=frames)
 
-    def beforPage(self, canvas, doc):
+    def afterDrawPage(self, canvas, doc):
         canvas.saveState()
+        print "draw on front page!"
         canvas.setFont('Times-Roman', 9)
         canvas.drawString(2.0 * cm, PAGE_HEIGHT - 2.0 * cm, "Ship/Invoice to:")
         top_text = create_text_object(canvas, PAGE_WIDTH / 2.0, PAGE_HEIGHT - 2.0 * cm, STORE_INFO, styleN, align='center')
@@ -88,23 +103,54 @@ class LaterPageTemplate(PageTemplate):
     def __init__(self, order=None):
         frames = [Frame(MARGIN, MARGIN,
             PAGE_WIDTH - (2 * MARGIN),
-            PAGE_HEIGHT - (2 * MARGIN) - (10 * cm)
+            PAGE_HEIGHT - (2 * MARGIN) - (1.5 * cm)
         )]
         self.order = order
         PageTemplate.__init__(self, id='later', frames=frames)
 
-    def beforPage(self, canvas, doc):
+    def afterDrawPage(self, canvas, doc):
         order = self.order
         canvas.saveState()
-        left_text = "The Bob Miller Book Room\nAcct#: {}".format(order.distributor.account)
+        left_text = "The Bob Miller Book Room\nAcct#: {}".format('placeholder!')
         center_text = "PO#: {}\n{}".format(order.po, order.date)
-        right_text = "{}\nPage #".format(order.distributor.full_name)
+        right_text = "{}".format(order.distributor.full_name)
         tx = create_text_object(canvas, 2 * cm, PAGE_HEIGHT - 2 * cm,
             left_text, styleN, align='left')
         canvas.drawText(tx)
         tx = create_text_object(canvas, PAGE_WIDTH / 2.0, PAGE_HEIGHT - 2 * cm,
             center_text, styleN, align='center')
         canvas.drawText(tx)
-        tx = create_text_object(canvas, PAGE_WIDTH - 2 * cm, PAGE_HEIGHT - 2 * cm,
-            right_text, styleN, align='right')
+        canvas.setFont(styleN.fontName, styleN.fontSize)
+        canvas.drawRightString(PAGE_WIDTH - 2 * cm, PAGE_HEIGHT - 2 * cm, right_text)
         canvas.restoreState()
+
+
+class NumberedCanvas(canvas.Canvas):
+    def __init__(self, *args, **kwargs):
+        canvas.Canvas.__init__(self, *args, **kwargs)
+        self._codes = []
+
+    def showPage(self):
+        self._codes.append({'code': self._code, 'stack': self._codeStack})
+        self._startPage()
+
+    def save(self):
+        """add page info to each page (page x of y)"""
+        # reset page counter
+        self._pageNumber = 0
+        for code in self._codes:
+            # recall saved page
+            self._code = code['code']
+            self._codeStack = code['stack']
+            self.setFont(styleN.fontName, styleN.fontSize)
+            X, Y = (PAGE_WIDTH - 2 * cm, PAGE_HEIGHT - 2 * cm)
+            if self._pageNumber != 0:  # offset so distributor name is above, except page 1
+                Y = Y - styleN.leading
+            self.drawRightString(X, Y,
+                "Page %(this)i of %(total)i" % {
+                   'this': self._pageNumber + 1,
+                   'total': len(self._codes),
+                }
+            )
+            canvas.Canvas.showPage(self)
+        self._doc.SaveToFile(self._filename, self)
