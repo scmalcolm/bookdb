@@ -10,6 +10,7 @@ PAGE_WIDTH, PAGE_HEIGHT = PAGESIZE
 MARGIN = 2 * cm
 styles = getSampleStyleSheet()
 styleN = styles['Normal']
+styleB = styleN
 
 STORE_INFO = (
 '''
@@ -83,18 +84,38 @@ class FirstPageTemplate(PageTemplate):
     def __init__(self, order=None):
         frames = [Frame(MARGIN, MARGIN,
             PAGE_WIDTH - (2 * MARGIN),
-            PAGE_HEIGHT - (2 * MARGIN) - (10 * cm)
-        )]
+            PAGE_HEIGHT - (2 * MARGIN) - (10 * cm))]
         self.order = order
         PageTemplate.__init__(self, id='first', frames=frames)
 
     def afterDrawPage(self, canvas, doc):
+        order = self.order
         canvas.saveState()
-        print "draw on front page!"
-        canvas.setFont('Times-Roman', 9)
-        canvas.drawString(2.0 * cm, PAGE_HEIGHT - 2.0 * cm, "Ship/Invoice to:")
-        top_text = create_text_object(canvas, PAGE_WIDTH / 2.0, PAGE_HEIGHT - 2.0 * cm, STORE_INFO, styleN, align='center')
+        canvas.setFont(styleN.fontName, styleN.fontSize)
+        canvas.drawString(
+            MARGIN,
+            PAGE_HEIGHT - MARGIN - styleN.leading,
+            "Ship/Invoice to:")
+        top_text = create_text_object(
+            canvas,
+            PAGE_WIDTH / 2.0,
+            PAGE_HEIGHT - MARGIN - styleN.leading,
+            STORE_INFO,
+            styleN,
+            align='center')
         canvas.drawText(top_text)
+        canvas.setFont('Times-Bold', styleB.fontSize)
+        canvas.drawString(
+            MARGIN,
+            PAGE_HEIGHT - MARGIN - 4 * cm - styleB.leading,
+            "Distributor")
+        address_text = create_text_object(
+            canvas,
+            MARGIN,
+            PAGE_HEIGHT - MARGIN - 4 * cm - styleB.leading - styleN.leading,
+            order.distributor.mailing_address(),
+            styleN)
+        canvas.drawText(address_text)
         canvas.restoreState()
 
 
@@ -103,8 +124,7 @@ class LaterPageTemplate(PageTemplate):
     def __init__(self, order=None):
         frames = [Frame(MARGIN, MARGIN,
             PAGE_WIDTH - (2 * MARGIN),
-            PAGE_HEIGHT - (2 * MARGIN) - (1.5 * cm)
-        )]
+            PAGE_HEIGHT - (2 * MARGIN) - (1.5 * cm))]
         self.order = order
         PageTemplate.__init__(self, id='later', frames=frames)
 
