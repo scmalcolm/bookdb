@@ -104,18 +104,106 @@ class FirstPageTemplate(PageTemplate):
             styleN,
             align='center')
         canvas.drawText(top_text)
+
+        # draw left column of upper section
+        LEFT = MARGIN
+        LINE_HEIGHT = styleB.leading
+        TOP = PAGE_HEIGHT - MARGIN - 4 * cm
+        DIST_HEIGHT = 7 * LINE_HEIGHT
+        HEADING_WIDTH = 2 * cm
         canvas.setFont('Times-Bold', styleB.fontSize)
         canvas.drawString(
-            MARGIN,
-            PAGE_HEIGHT - MARGIN - 4 * cm - styleB.leading,
+            LEFT,
+            TOP - LINE_HEIGHT,
             "Distributor")
         address_text = create_text_object(
             canvas,
-            MARGIN,
-            PAGE_HEIGHT - MARGIN - 4 * cm - styleB.leading - styleN.leading,
+            LEFT,
+            TOP - styleB.leading - LINE_HEIGHT,
             order.distributor.mailing_address(),
             styleN)
         canvas.drawText(address_text)
+        canvas.setFont('Times-Bold', styleB.fontSize)
+        canvas.drawString(
+            LEFT,
+            TOP - DIST_HEIGHT - LINE_HEIGHT,
+            "Phone:")
+        canvas.drawString(
+            LEFT,
+            TOP - DIST_HEIGHT - 3 * LINE_HEIGHT,
+            "Fax:")
+        canvas.setFont(styleN.fontName, styleN.fontSize)
+        if order.distributor.phone is not None:
+            canvas.drawString(
+                LEFT + HEADING_WIDTH,
+                TOP - DIST_HEIGHT - LINE_HEIGHT,
+                order.distributor.phone)
+        if order.distributor.fax is not None:
+            canvas.drawString(
+                LEFT + HEADING_WIDTH,
+                TOP - DIST_HEIGHT - 3 * LINE_HEIGHT,
+                order.distributor.fax)
+
+        # draw right column of upper section
+        LEFT = PAGE_WIDTH / 2.0
+        HEADING_WIDTH = 3.5 * cm
+        canvas.setFont('Times-Bold', styleB.fontSize)
+        canvas.drawString(
+            LEFT,
+            TOP - LINE_HEIGHT,
+            'Purchase Order #:')
+        canvas.drawString(
+            LEFT,
+            TOP - 3 * LINE_HEIGHT,
+            'Date:')
+        canvas.drawString(
+            LEFT,
+            TOP - 5 * LINE_HEIGHT,
+            'Account Number:')
+        canvas.drawString(
+            LEFT,
+            TOP - 7 * LINE_HEIGHT,
+            'Account Rep:')
+        canvas.drawString(
+            LEFT,
+            TOP - 9 * LINE_HEIGHT,
+            'Shipping Method:')
+        canvas.setFont(styleN.fontName, styleN.fontSize)
+        if order.po is not None:
+            canvas.drawString(
+                LEFT + HEADING_WIDTH,
+                TOP - LINE_HEIGHT,
+                order.po)
+        if order.date is not None:
+            canvas.drawString(
+                LEFT + HEADING_WIDTH,
+                TOP - 3 * LINE_HEIGHT,
+                order.date.isoformat())
+        if order.distributor.account_number is not None:
+            canvas.drawString(
+                LEFT + HEADING_WIDTH,
+                TOP - 5 * LINE_HEIGHT,
+                order.distributor.account_number)
+        if order.distributor.sales_rep is not None:
+            canvas.drawString(
+                LEFT + HEADING_WIDTH,
+                TOP - 7 * LINE_HEIGHT,
+                order.distributor.sales_rep)
+        if order.shipping_method is not None:
+            canvas.drawString(
+                LEFT + HEADING_WIDTH,
+                TOP - 9 * LINE_HEIGHT,
+                str(order.shipping_method))
+
+        # draw special instructions part
+        string = 'Please send the following title'
+        if order.order_entries.count > 1:
+            string += 's'
+        string += ':'
+        canvas.drawString(
+            MARGIN,
+            PAGE_HEIGHT - MARGIN - 10 * cm,
+            string)
         canvas.restoreState()
 
 
