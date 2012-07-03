@@ -76,15 +76,14 @@ class Order(Base):
 class Distributor(Base):
     __tablename__ = 'distributors'
     id = Column(Integer, primary_key=True)
-    short_name = Column(Text, unique=True)
-    full_name = Column(Text)
+    short_name = Column(Text, unique=True, nullable=False)
+    full_name = Column(Text, unique=True, nullable=False)
     account_number = Column(Text)
     sales_rep = Column(Text)
     phone = Column(Text)
     fax = Column(Text)
     email = Column(Text)
-    address1 = Column(String)
-    address2 = Column(String)
+    street_address = Column(String)
     city = Column(String)
     province = Column(String)
     postal_code = Column(String)
@@ -99,6 +98,17 @@ class Distributor(Base):
 
     def __repr__(self):
         return self.short_name
+
+    def mailing_address(self):
+        address_lines = [self.full_name]
+        if self.street_address is not None:
+            address_lines.append(self.street_address.split('\n'))
+        city_line = ' '.join([x for x in (self.city, self.province, self.postal_code) if x is not None])
+        if city_line is not None and city_line != '':
+            address_lines.append(city_line)
+        if self.country is not None and self.country != 'Canada':
+            address_lines.append(self.country)
+        return '\n'.join(address_lines)
 
 
 class Publisher(Base):
