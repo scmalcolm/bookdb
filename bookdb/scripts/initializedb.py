@@ -54,10 +54,10 @@ def main(argv=sys.argv):
         DBSession.add_all(shipping)
         book = Book('9780199219766',
                     'Great Expectations',
-                    'Dickens, Charles',
                     publishers[1],
                     bindings[0],
                     locations[0],
+                    authors=[('Dickens', 'Charles')],
                     )
         DBSession.add(book)
         order = Order('1A1000',

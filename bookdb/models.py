@@ -28,37 +28,65 @@ Base = declarative_base()
 
 class Book(Base):
     __tablename__ = 'books'
-    id = Column(Integer, primary_key=True)
-    binding_id = Column(Integer, ForeignKey('bindings.id'))
-    location_id = Column(Integer, ForeignKey('shelf_locations.id'))
-    publisher_id = Column(Integer, ForeignKey('publishers.id'))
-    isbn13 = Column(Text, unique=True)
-    title = Column(Text)
-    author_name = Column(Text)  # use format 'last1, first1; last2, first2; ...'
+    book_id = Column(Integer, primary_key=True)
+    binding_id = Column(Integer, ForeignKey('bindings.binding_id'))
+    location_id = Column(Integer, ForeignKey('shelf_locations.location_id'))
+    publisher_id = Column(Integer, ForeignKey('publishers.publisher_id'))
+    isbn13 = Column(String(13), unique=True)
+    title = Column(String)
+    author_name = Column(String)  # use format 'last1, first1; last2, first2; ...'
     publisher = relationship("Publisher")
     shelf_location = relationship("ShelfLocation")
     binding = relationship("Binding")
+    authors = relationship("Author", back_populates="book", cascade="all, delete-orphan")
 
-    def __init__(self, isbn13, title, authors, publisher, binding, shelf_location):
+    def __init__(self, isbn13, title, publisher, binding, shelf_location, authors=[]):
         self.isbn13 = isbn13
         self.title = title
-        self.author_name = authors
         self.publisher = publisher
         self.binding = binding
         self.shelf_location = shelf_location
+        self.authors = [Author(first, last) for first, last in authors]
 
     def author_lastname(self):
-        authors = self.author_name.split(';')
-        author = authors[0].split(',')
-        return author[0]
+        return self.authors[0].lastname
+
+    def author_string(self):
+        return '; '.join([str(a) for a in self.authors])
+
+
+class Author(Base):
+    __tablename__ = 'authors'
+    author_id = Column(Integer, primary_key=True)
+    book_id = Column(Integer, ForeignKey('books.book_id'))
+    lastname = Column(String)
+    firstname = Column(String)
+    comment = Column(String)
+    book = relationship("Book", back_populates="authors")
+
+    @classmethod
+    def parse_author_string(string):
+        return [(a[1], a[0]) for a in map(lambda(x): x.split(', '), string.split('; '))]
+
+    @classmethod
+    def create_author_string(authors):
+        return '; '.join(map(lambda(x): ', '.join(x.lastname, x.firstname), authors))
+
+    def __init__(self, lastname, firstname, comment=None):
+        self.lastname = lastname
+        self.firstname = firstname
+        self.comment = comment
+
+    def __repr__(self):
+        return ', '.join([self.lastname, self.firstname])
 
 
 class Order(Base):
     __tablename__ = 'orders'
-    id = Column(Integer, primary_key=True)
-    distributor_id = Column(Integer, ForeignKey('distributors.id'))
-    shipping_id = Column(Integer, ForeignKey('shipping_methods.id'))
-    po = Column(Text, unique=True)
+    order_id = Column(Integer, primary_key=True)
+    distributor_id = Column(Integer, ForeignKey('distributors.distributor_id'))
+    shipping_id = Column(Integer, ForeignKey('shipping_methods.shipping_id'))
+    po = Column(String, unique=True)
     date = Column(Date)
     comment = Column(Text)
     order_entries = relationship("OrderEntry", back_populates="order", cascade="all, delete-orphan")
@@ -75,14 +103,14 @@ class Order(Base):
 
 class Distributor(Base):
     __tablename__ = 'distributors'
-    id = Column(Integer, primary_key=True)
-    short_name = Column(Text, unique=True, nullable=False)
-    full_name = Column(Text, unique=True, nullable=False)
-    account_number = Column(Text)
-    sales_rep = Column(Text)
-    phone = Column(Text)
-    fax = Column(Text)
-    email = Column(Text)
+    distributor_id = Column(Integer, primary_key=True)
+    short_name = Column(String, unique=True, nullable=False)
+    full_name = Column(String, unique=True, nullable=False)
+    account_number = Column(String)
+    sales_rep = Column(String)
+    phone = Column(String)
+    fax = Column(String)
+    email = Column(String)
     street_address = Column(String)
     city = Column(String)
     province = Column(String)
@@ -113,7 +141,7 @@ class Distributor(Base):
 
 class Publisher(Base):
     __tablename__ = 'publishers'
-    id = Column(Integer, primary_key=True)
+    publisher_id = Column(Integer, primary_key=True)
     short_name = Column(Text, unique=True)
     full_name = Column(Text)
 
@@ -130,7 +158,7 @@ class Publisher(Base):
 
 class ShelfLocation(Base):
     __tablename__ = 'shelf_locations'
-    id = Column(Integer, primary_key=True)
+    location_id = Column(Integer, primary_key=True)
     location = Column(Text, unique=True)
 
     def __init__(self, location):
@@ -142,7 +170,7 @@ class ShelfLocation(Base):
 
 class Binding(Base):
     __tablename__ = 'bindings'
-    id = Column(Integer, primary_key=True)
+    binding_id = Column(Integer, primary_key=True)
     binding = Column(Text, unique=True)
 
     def __init__(self, binding):
@@ -154,7 +182,7 @@ class Binding(Base):
 
 class ShippingMethod(Base):
     __tablename__ = 'shipping_methods'
-    id = Column(Integer, primary_key=True)
+    shipping_id = Column(Integer, primary_key=True)
     shipping_method = Column(Text)
 
     def __init__(self, shipping_method):
@@ -166,8 +194,8 @@ class ShippingMethod(Base):
 
 class OrderEntry(Base):
     __tablename__ = 'order_entries'
-    order_id = Column(Integer, ForeignKey('orders.id'), primary_key=True)
-    book_id = Column(Integer, ForeignKey('books.id'), primary_key=True)
+    order_id = Column(Integer, ForeignKey('orders.order_id'), primary_key=True)
+    book_id = Column(Integer, ForeignKey('books.book_id'), primary_key=True)
     quantity = Column(Integer)
     order = relationship("Order", back_populates="order_entries")
     book = relationship("Book")

@@ -53,8 +53,8 @@
             <input id="title" name="title" type="text" tal:attributes="readonly readonly"
                 value="${book.title}"/><br/>
             <label for="author">Author</label>
-            <input id="author" name="author_name" type="text" tal:attributes="readonly readonly"
-                value="${book.author_name}"/><br/>
+            <input id="author" name="author_string" type="text" tal:attributes="readonly readonly"
+                value="${book.author_string()}"/><br/>
             <label for="publisher">Publisher</label>
             <input id="publisher" type="text" readonly="readonly"
                 value="${book.publisher}" tal:condition="not editable"/>

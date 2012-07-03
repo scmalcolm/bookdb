@@ -25,6 +25,7 @@ from .models import (
     OrderEntry,
     ShippingMethod,
     Distributor,
+    Author,
     )
 
 from .printing import generate_order_pdf
@@ -57,15 +58,16 @@ def add_book(request):
     if 'form.submitted' in request.params:
         isbn13 = request.params['isbn13']
         title = request.params['title']
-        author_name = request.params['author_name']
+        author_string = request.params['author_string']
         publisher = DBSession.query(Publisher).filter_by(
                             short_name=request.params['publisher']).one()
         binding = DBSession.query(Binding).filter_by(
                             binding=request.params['binding']).one()
         shelf_location = DBSession.query(ShelfLocation).filter_by(
                             location=request.params['shelf_location']).one()
+        authors = Author.parse_author_string(author_string)
         # TODO: validate data
-        new_book = Book(isbn13, title, author_name, publisher, binding, shelf_location)
+        new_book = Book(isbn13, title, publisher, binding, shelf_location, authors=authors)
         DBSession.add(new_book)
         return HTTPFound(location=request.route_url('view_book', isbn13=isbn13))
     save_url = request.route_url('add_book')
@@ -91,7 +93,7 @@ def edit_book(request):
         # TODO: Validate data before accepting it.
         book.isbn13 = request.params['isbn13']
         book.title = request.params['title']
-        book.author_name = request.params['author_name']
+        book.authors = Author.parse_author_string(request.params['author_string'])
         book.publisher = DBSession.query(Publisher).filter_by(
                             short_name=request.params['publisher']).one()
         book.binding = DBSession.query(Binding).filter_by(
