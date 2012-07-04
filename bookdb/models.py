@@ -46,7 +46,15 @@ class Book(Base):
         self.publisher = publisher
         self.binding = binding
         self.shelf_location = shelf_location
-        self.authors = [Author(first, last) for first, last in authors]
+        author_list = []
+        for author in authors:
+            lname = author[0]
+            try:
+                fname = author[1]
+            except:
+                fname = None
+            author_list.append(Author(lname, fname))
+        self.authors = author_list
 
     def author_lastname(self):
         return self.authors[0].lastname
@@ -61,24 +69,25 @@ class Author(Base):
     book_id = Column(Integer, ForeignKey('books.book_id'))
     lastname = Column(String)
     firstname = Column(String)
-    comment = Column(String)
     book = relationship("Book", back_populates="authors")
 
     @classmethod
-    def parse_author_string(string):
-        return [(a[1], a[0]) for a in map(lambda(x): x.split(', '), string.split('; '))]
+    def parse_author_string(cls, string):
+        return [a for a in map(lambda(x): x.split(', '), string.split('; '))]
 
     @classmethod
-    def create_author_string(authors):
+    def create_author_string(cls, authors):
         return '; '.join(map(lambda(x): ', '.join(x.lastname, x.firstname), authors))
 
-    def __init__(self, lastname, firstname, comment=None):
+    def __init__(self, lastname, firstname=None):
         self.lastname = lastname
         self.firstname = firstname
-        self.comment = comment
 
     def __repr__(self):
-        return ', '.join([self.lastname, self.firstname])
+        if self.firstname is not None:
+            return ', '.join([self.lastname, self.firstname])
+        else:
+            return self.lastname
 
 
 class Order(Base):

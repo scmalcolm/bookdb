@@ -71,7 +71,7 @@ def add_book(request):
         DBSession.add(new_book)
         return HTTPFound(location=request.route_url('view_book', isbn13=isbn13))
     save_url = request.route_url('add_book')
-    book = Book('', '', '', '', '', '')
+    book = Book('', '', '', '', '', [])
     bindings = DBSession.query(Binding).all()
     locations = DBSession.query(ShelfLocation).all()
     publishers = DBSession.query(Publisher).all()
