@@ -1,17 +1,27 @@
 from reportlab.lib import pagesizes
 from reportlab.pdfgen import canvas
-from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Table, NextPageTemplate
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Table, NextPageTemplate, Paragraph
+from reportlab.lib.styles import StyleSheet1, ParagraphStyle
 from reportlab.lib.units import cm
 
 _default_filename = 'order.pdf'
 PAGESIZE = pagesizes.letter
 PAGE_WIDTH, PAGE_HEIGHT = PAGESIZE
 MARGIN = 2 * cm
-styles = getSampleStyleSheet()
-styleN = styles['Normal']
-styleB = styleN
 
+stylesheet = StyleSheet1()
+stylesheet.add(ParagraphStyle(name='normal',
+                              fontName='Times-Roman',
+                              fontSize=12,
+                              leading=12,
+                              spaceBefore=0.25 * cm))
+stylesheet.add(ParagraphStyle(name='heading',
+                              fontName='Times-Bold',
+                              fontSize=12,
+                              leading=12,))
+
+styleN = stylesheet['normal']
+styleB = stylesheet['heading']
 STORE_INFO = (
 '''
 The Bob Miller Book Room
@@ -43,40 +53,17 @@ def generate_order_pdf(order, filename=_default_filename):
             ]
         data.append(row)
     table = Table(data, colWidths=columns, repeatRows=1)
-    story.append(table)
 
-    doc.build(story, canvasmaker=NumberedCanvas)
-
-
-def create_text_object(canv, x, y, text, style, align='left'):
-    font = (style.fontName, style.fontSize, style.leading)
-    lines = text.split("\n")
-    offsets = []
-    if align == 'center':
-        maxwidth = 0
-        for line in lines:
-            offsets.append(canv.stringWidth(line, *font[:2]))
-        maxwidth = max(*offsets)
-        offsets = [(maxwidth - i) / 2 for i in offsets]
-        x = x - maxwidth / 2.0
-    elif align == 'left':
-        offsets = [0] * len(lines)
-    elif align == 'right':
-        maxwidth = 0
-        for line in lines:
-            offsets.append(canv.stringWidth(line, *font[:2]))
-        maxwidth = max(*offsets)
-        offsets = [(maxwidth - i) for i in offsets]
-        x = x - maxwidth
+    if len(order.order_entries) > 1:
+        plural = 's'
     else:
-        raise ValueError("'{}' is not a supported alignment".format(align))
-    tx = canv.beginText(x, y)
-    tx.setFont(*font)
-    for offset, line in zip(offsets, lines):
-        tx.setXPos(offset)
-        tx.textLine(line)
-        tx.setXPos(-offset)
-    return tx
+        plural = ''
+
+    story.append(Paragraph("ATTENTION: ORDER DEPARTMENT", styleN))
+    story.append(Paragraph("<i>Special Instructions</i>:<b>" + order.comment + "</b>", styleN))
+    story.append(Paragraph('<i>Please send the following title' + plural + ':</i>', styleN))
+    story.append(table)
+    doc.build(story, canvasmaker=NumberedCanvas)
 
 
 class FirstPageTemplate(PageTemplate):
@@ -84,7 +71,7 @@ class FirstPageTemplate(PageTemplate):
     def __init__(self, order=None):
         frames = [Frame(MARGIN, MARGIN,
             PAGE_WIDTH - (2 * MARGIN),
-            PAGE_HEIGHT - (2 * MARGIN) - (10 * cm))]
+            PAGE_HEIGHT - (2 * MARGIN) - (8.5 * cm))]
         self.order = order
         PageTemplate.__init__(self, id='first', frames=frames)
 
@@ -99,7 +86,7 @@ class FirstPageTemplate(PageTemplate):
         top_text = create_text_object(
             canvas,
             PAGE_WIDTH / 2.0,
-            PAGE_HEIGHT - MARGIN - styleN.leading,
+            PAGE_HEIGHT - MARGIN,
             STORE_INFO,
             styleN,
             align='center')
@@ -111,7 +98,7 @@ class FirstPageTemplate(PageTemplate):
         TOP = PAGE_HEIGHT - MARGIN - 4 * cm
         DIST_HEIGHT = 7 * LINE_HEIGHT
         HEADING_WIDTH = 2 * cm
-        canvas.setFont('Times-Bold', styleB.fontSize)
+        canvas.setFont(styleB.fontName, styleB.fontSize)
         canvas.drawString(
             LEFT,
             TOP - LINE_HEIGHT,
@@ -123,7 +110,7 @@ class FirstPageTemplate(PageTemplate):
             order.distributor.mailing_address(),
             styleN)
         canvas.drawText(address_text)
-        canvas.setFont('Times-Bold', styleB.fontSize)
+        canvas.setFont(styleB.fontName, styleB.fontSize)
         canvas.drawString(
             LEFT,
             TOP - DIST_HEIGHT - LINE_HEIGHT,
@@ -147,7 +134,7 @@ class FirstPageTemplate(PageTemplate):
         # draw right column of upper section
         LEFT = PAGE_WIDTH / 2.0
         HEADING_WIDTH = 3.5 * cm
-        canvas.setFont('Times-Bold', styleB.fontSize)
+        canvas.setFont(styleB.fontName, styleB.fontSize)
         canvas.drawString(
             LEFT,
             TOP - LINE_HEIGHT,
@@ -194,17 +181,6 @@ class FirstPageTemplate(PageTemplate):
                 LEFT + HEADING_WIDTH,
                 TOP - 9 * LINE_HEIGHT,
                 str(order.shipping_method))
-
-        # draw special instructions part
-        string = 'Please send the following title'
-        if order.order_entries.count > 1:
-            string += 's'
-        string += ':'
-        canvas.drawString(
-            MARGIN,
-            PAGE_HEIGHT - MARGIN - 10 * cm,
-            string)
-        canvas.restoreState()
 
 
 class LaterPageTemplate(PageTemplate):
@@ -262,3 +238,34 @@ class NumberedCanvas(canvas.Canvas):
             )
             canvas.Canvas.showPage(self)
         self._doc.SaveToFile(self._filename, self)
+
+
+def create_text_object(canv, x, y, text, style, align='left'):
+    font = (style.fontName, style.fontSize, style.leading)
+    lines = text.split("\n")
+    offsets = []
+    if align == 'center':
+        maxwidth = 0
+        for line in lines:
+            offsets.append(canv.stringWidth(line, *font[:2]))
+        maxwidth = max(*offsets)
+        offsets = [(maxwidth - i) / 2 for i in offsets]
+        x = x - maxwidth / 2.0
+    elif align == 'left':
+        offsets = [0] * len(lines)
+    elif align == 'right':
+        maxwidth = 0
+        for line in lines:
+            offsets.append(canv.stringWidth(line, *font[:2]))
+        maxwidth = max(*offsets)
+        offsets = [(maxwidth - i) for i in offsets]
+        x = x - maxwidth
+    else:
+        raise ValueError("'{}' is not a supported alignment".format(align))
+    tx = canv.beginText(x, y)
+    tx.setFont(*font)
+    for offset, line in zip(offsets, lines):
+        tx.setXPos(offset)
+        tx.textLine(line)
+        tx.setXPos(-offset)
+    return tx
