@@ -1,6 +1,6 @@
 from reportlab.lib import pagesizes
 from reportlab.pdfgen import canvas
-from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Table, NextPageTemplate, Paragraph
+from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Table, NextPageTemplate, Paragraph, TableStyle
 from reportlab.lib.styles import StyleSheet1, ParagraphStyle
 from reportlab.lib.units import cm
 
@@ -19,9 +19,19 @@ stylesheet.add(ParagraphStyle(name='heading',
                               fontName='Times-Bold',
                               fontSize=12,
                               leading=12,))
+stylesheet.add(ParagraphStyle(name='table-heading',
+                              fontName='Times-Bold',
+                              fontSize=11,
+                              leading=11,))
+stylesheet.add(ParagraphStyle(name='table-body',
+                              fontName='Times-Roman',
+                              fontSize=11,
+                              leading=11,))
 
 styleN = stylesheet['normal']
 styleB = stylesheet['heading']
+styleTH = stylesheet['table-heading']
+styleTR = stylesheet['table-body']
 STORE_INFO = (
 '''
 The Bob Miller Book Room
@@ -53,6 +63,8 @@ def generate_order_pdf(order, filename=_default_filename):
             ]
         data.append(row)
     table = Table(data, colWidths=columns, repeatRows=1)
+    table.setStyle(TableStyle([('FONT', (0, 0), (-1, 0), styleTH.fontName, styleTH.fontSize),
+                               ('FONT', (0, 1), (-1, -1), styleTR.fontName, styleTR.fontSize)]))
 
     if len(order.order_entries) > 1:
         plural = 's'
