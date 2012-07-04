@@ -111,7 +111,8 @@ class Distributor(Base):
     phone = Column(String)
     fax = Column(String)
     email = Column(String)
-    street_address = Column(String)
+    address1 = Column(String)
+    address2 = Column(String)
     city = Column(String)
     province = Column(String)
     postal_code = Column(String)
@@ -129,8 +130,10 @@ class Distributor(Base):
 
     def mailing_address(self):
         address_lines = [self.full_name]
-        if self.street_address is not None:
-            address_lines.append(self.street_address.split('\n'))
+        if self.address1 is not None:
+            address_lines.append(self.address1)
+        if self.address2 is not None:
+            address_lines.append(self.address2)
         city_line = ' '.join([x for x in (self.city, self.province, self.postal_code) if x is not None])
         if city_line is not None and city_line != '':
             address_lines.append(city_line)
