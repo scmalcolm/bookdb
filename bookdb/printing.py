@@ -52,7 +52,11 @@ def generate_order_pdf(order, filename=_default_filename):
 
     columns = [1.0 * cm, 2.75 * cm, 6 * cm, 3.25 * cm, 3 * cm, 1.5 * cm]
     data = [['Qty', 'ISBN', 'Title', 'Author', 'Publisher', 'Binding']]
-    for entry in order.order_entries:
+
+    def compare_titles(a, b):
+        return cmp(a.book.title, b.book.title)
+
+    for entry in sorted(order.order_entries, compare_titles):
         row = [
             entry.quantity,
             entry.book.isbn13,
