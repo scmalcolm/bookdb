@@ -127,12 +127,24 @@ class Distributor(Base):
     postal_code = Column(String)
     country = Column(String)
 
-    def __init__(self, short_name, full_name=None):
+    def __init__(self, short_name, full_name=None, account_number=None, sales_rep=None, phone=None,
+        fax=None, email=None, address1=None, address2=None, city=None, province=None, postal_code=None, country=None):
         self.short_name = short_name
         if full_name is None:
             self.full_name = short_name
         else:
             self.full_name = full_name
+        self.account_number = account_number
+        self.sales_rep = sales_rep
+        self.phone = phone
+        self.fax = fax
+        self.email = email
+        self.address1 = address1
+        self.address2 = address2
+        self.city = city
+        self.province = province
+        self.postal_code = postal_code
+        self.country = country
 
     def __repr__(self):
         return self.short_name
