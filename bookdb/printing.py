@@ -50,7 +50,7 @@ def generate_order_pdf(order, filename=_default_filename):
     doc = BaseDocTemplate(filename, pagesize=PAGESIZE, pageTemplates=[firstpage, laterpages])
     story = [NextPageTemplate('later')]
 
-    columns = [0.75 * cm, 2.75 * cm, 6 * cm, 3.5 * cm, 3 * cm, 1.5 * cm]
+    columns = [1.0 * cm, 2.75 * cm, 6 * cm, 3.25 * cm, 3 * cm, 1.5 * cm]
     data = [['Qty', 'ISBN', 'Title', 'Author', 'Publisher', 'Binding']]
     for entry in order.order_entries:
         row = [
