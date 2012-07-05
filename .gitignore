@@ -2,3 +2,5 @@
 *.pyo
 *.egg-info
 *.db
+build/*
+dist/*
