@@ -159,7 +159,7 @@ def view_order(request):
 def make_order_pdf(request):
     po = request.matchdict['po']
     order = DBSession.query(Order).filter_by(po=po).one()
-    filename = '/Users/bmbr/dev/{}.pdf'.format(po)
+    filename = '/Users/bmbr/Orders/{}.pdf'.format(po)
     generate_order_pdf(order, filename)
     return HTTPFound(location=request.route_url('view_order', po=po))
 
