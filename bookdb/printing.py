@@ -63,8 +63,11 @@ def generate_order_pdf(order, filename=_default_filename):
             ]
         data.append(row)
     table = Table(data, colWidths=columns, repeatRows=1)
-    table.setStyle(TableStyle([('FONT', (0, 0), (-1, 0), styleTH.fontName, styleTH.fontSize),
-                               ('FONT', (0, 1), (-1, -1), styleTR.fontName, styleTR.fontSize)]))
+    table.setStyle(TableStyle([('BOTTOMPADDING', (0, 0), (-1, -1), 0.5 * cm),
+                               ('FONT', (0, 0), (-1, 0), styleTH.fontName, styleTH.fontSize),
+                               ('LEADING', (0, 0), (-1, 0), styleTH.leading),
+                               ('FONT', (0, 1), (-1, -1), styleTR.fontName, styleTR.fontSize),
+                               ('LEADING', (0, 1), (-1, -1), styleTR.leading)]))
 
     if len(order.order_entries) > 1:
         plural = 's'
