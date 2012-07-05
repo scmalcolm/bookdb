@@ -37,6 +37,16 @@ def make_test_pdf(filename=_default_filename):
                 location,
                 [('Seneca',), ('Brown', 'Dan')]),
             x)
+    OrderEntry(
+        dummy_order,
+        Book(
+            '9781112223399',
+            'AWESOME',
+            penguin,
+            paperback,
+            location,
+            [('Seneca',), ('Brown', 'Dan')]),
+        9)
     generate_order_pdf(dummy_order, filename)
 
 if __name__ == '__main__':
