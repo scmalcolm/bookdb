@@ -42,7 +42,7 @@ class Book(Base):
 
     def __init__(self, isbn13, title, publisher, binding, shelf_location, authors=[]):
         self.isbn13 = isbn13
-        self.title = title
+        self.title = title.upper()
         self.publisher = publisher
         self.binding = binding
         self.shelf_location = shelf_location
