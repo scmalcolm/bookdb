@@ -207,7 +207,7 @@ class LaterPageTemplate(PageTemplate):
     def afterDrawPage(self, canvas, doc):
         order = self.order
         canvas.saveState()
-        left_text = "The Bob Miller Book Room\nAcct#: {}".format('placeholder!')
+        left_text = "The Bob Miller Book Room\nAcct#: {}".format(order.distributor.account_number)
         center_text = "PO#: {}\n{}".format(order.po, order.date)
         right_text = "{}".format(order.distributor.full_name)
         tx = create_text_object(canvas, 2 * cm, PAGE_HEIGHT - 2 * cm,
