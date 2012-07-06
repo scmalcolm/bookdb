@@ -51,27 +51,36 @@ def generate_order_pdf(order, filename=_default_filename):
     story = [NextPageTemplate('later')]
 
     columns = [1.0 * cm, 2.75 * cm, 6 * cm, 3.25 * cm, 3 * cm, 1.5 * cm]
-    data = [['Qty', 'ISBN', 'Title', 'Author', 'Publisher', 'Binding']]
+    data = [[
+        Paragraph('Qty', styleTH),
+        Paragraph('ISBN', styleTH),
+        Paragraph('Title', styleTH),
+        Paragraph('Author', styleTH),
+        Paragraph('Publisher', styleTH),
+        Paragraph('Binding', styleTH),
+        ]]
 
     def compare_titles(a, b):
         return cmp(a.book.title, b.book.title)
 
     for entry in sorted(order.order_entries, compare_titles):
         row = [
-            entry.quantity,
-            entry.book.isbn13,
-            entry.book.title,
-            entry.book.author_lastname(),
-            entry.book.publisher,
-            entry.book.binding,
+            Paragraph(str(entry.quantity), styleTR),
+            Paragraph(str(entry.book.isbn13), styleTR),
+            Paragraph(str(entry.book.title), styleTR),
+            Paragraph(str(entry.book.author_lastname()), styleTR),
+            Paragraph(str(entry.book.publisher), styleTR),
+            Paragraph(str(entry.book.binding), styleTR),
             ]
         data.append(row)
     table = Table(data, colWidths=columns, repeatRows=1)
     table.setStyle(TableStyle([('BOTTOMPADDING', (0, 0), (-1, -1), 0.5 * cm),
-                               ('FONT', (0, 0), (-1, 0), styleTH.fontName, styleTH.fontSize),
-                               ('LEADING', (0, 0), (-1, 0), styleTH.leading),
-                               ('FONT', (0, 1), (-1, -1), styleTR.fontName, styleTR.fontSize),
-                               ('LEADING', (0, 1), (-1, -1), styleTR.leading)]))
+                               ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                               #('FONT', (0, 0), (-1, 0), styleTH.fontName, styleTH.fontSize),
+                               #('LEADING', (0, 0), (-1, 0), styleTH.leading),
+                               #('FONT', (0, 1), (-1, -1), styleTR.fontName, styleTR.fontSize),
+                               #('LEADING', (0, 1), (-1, -1), styleTR.leading),
+                               ]))
 
     if len(order.order_entries) > 1:
         plural = 's'
