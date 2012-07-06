@@ -54,6 +54,7 @@ body h6{font-family:"NeutonRegular","Lucida Grande",Lucida,Verdana,sans-serif;fo
 .align-left{text-align:left;}
 .align-right{text-align:right;}
 .align-center{text-align:center;}
+.order-entries{height:400px;overflow: scroll}
 ul.links{margin:0;padding:0;}
 ul.links li{list-style-type:none;font-size:14px;}
 form{border-style:none;}
