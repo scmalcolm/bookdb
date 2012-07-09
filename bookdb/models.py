@@ -60,7 +60,7 @@ class Book(Base):
         return self.authors[0].lastname
 
     def author_string(self):
-        return '; '.join([str(a) for a in self.authors])
+        return '; '.join([unicode(a) for a in self.authors])
 
 
 class Author(Base):
@@ -77,7 +77,7 @@ class Author(Base):
 
     @classmethod
     def create_author_string(cls, authors):
-        return '; '.join(map(lambda(x): ', '.join(x.lastname, x.firstname), authors))
+        return u'; '.join(map(lambda(x): ', '.join(x.lastname, x.firstname), authors))
 
     def __init__(self, lastname, firstname=None):
         self.lastname = lastname
