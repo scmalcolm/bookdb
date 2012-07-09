@@ -48,7 +48,7 @@
           method="post">
             <label for="isbn">ISBN</label>
             <input id="isbn" name="isbn13" type="text" tal:attributes="readonly readonly"
-                value="${book.isbn13}"/><br/>
+                value="${book.isbn13}" autofocus="autofocus"/><br/>
             <label for="title">Title</label>
             <input id="title" name="title" type="text" tal:attributes="readonly readonly"
                 value="${book.title}"/><br/>
