@@ -65,12 +65,12 @@ def generate_order_pdf(order, filename=_default_filename):
 
     for entry in sorted(order.order_entries, compare_titles):
         row = [
-            Paragraph(str(entry.quantity), styleTR),
-            Paragraph(str(entry.book.isbn13), styleTR),
-            Paragraph(str(entry.book.title), styleTR),
-            Paragraph(str(entry.book.author_lastname()), styleTR),
-            Paragraph(str(entry.book.publisher), styleTR),
-            Paragraph(str(entry.book.binding), styleTR),
+            Paragraph(unicode(entry.quantity), styleTR),
+            Paragraph(unicode(entry.book.isbn13), styleTR),
+            Paragraph(unicode(entry.book.title), styleTR),
+            Paragraph(unicode(entry.book.author_lastname()), styleTR),
+            Paragraph(unicode(entry.book.publisher), styleTR),
+            Paragraph(unicode(entry.book.binding), styleTR),
             ]
         data.append(row)
     table = Table(data, colWidths=columns, repeatRows=1)
@@ -208,7 +208,7 @@ class FirstPageTemplate(PageTemplate):
             canvas.drawString(
                 LEFT + HEADING_WIDTH,
                 TOP - 9 * LINE_HEIGHT,
-                str(order.shipping_method))
+                unicode(order.shipping_method))
 
 
 class LaterPageTemplate(PageTemplate):
