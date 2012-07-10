@@ -34,8 +34,6 @@ from .printing import generate_order_pdf
 from .security import USERS
 
 
-
-
 @view_config(route_name='front_page', renderer='templates/front_page.pt')
 def front_page(request):
     shared_template = get_renderer('templates/shared.pt').implementation()
@@ -44,7 +42,7 @@ def front_page(request):
                 )
 
 
-@view_config(route_name='view_book', renderer='templates/single_book.pt')
+@view_config(route_name='view_book', renderer='templates/view_book.pt')
 def view_book(request):
     shared_template = get_renderer('templates/shared.pt').implementation()
     isbn13 = request.matchdict['isbn13']
@@ -56,11 +54,10 @@ def view_book(request):
                 book=book,
                 edit_url=edit_url,
                 logged_in=authenticated_userid(request),
-                editable=False,
                 )
 
 
-@view_config(route_name='add_book', renderer='templates/single_book.pt', permission='edit')
+@view_config(route_name='add_book', renderer='templates/edit_book.pt', permission='edit')
 def add_book(request):
     shared_template = get_renderer('templates/shared.pt').implementation()
     if 'form.submitted' in request.params:
@@ -87,14 +84,13 @@ def add_book(request):
                 book=book,
                 save_url=save_url,
                 logged_in=authenticated_userid(request),
-                editable=True,
                 bindings=bindings,
                 locations=locations,
                 publishers=publishers,
                 )
 
 
-@view_config(route_name='edit_book', renderer='templates/single_book.pt', permission='edit')
+@view_config(route_name='edit_book', renderer='templates/edit_book.pt', permission='edit')
 def edit_book(request):
     shared_template = get_renderer('templates/shared.pt').implementation()
     isbn13 = request.matchdict['isbn13']
@@ -119,7 +115,6 @@ def edit_book(request):
                 book=book,
                 save_url=request.route_url('edit_book', isbn13=isbn13),
                 logged_in=authenticated_userid(request),
-                editable=True,
                 bindings=bindings,
                 locations=locations,
                 publishers=publishers,

@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal">
+<head metal:use-macro="shared.macros['standard_head']">
+</head>
+<body metal:use-macro="shared.macros['standard_body']">
+  <div metal:fill-slot="page_title">
+    
+    <b>Edit a Book</b>
+
+  </div>
+  <div metal:fill-slot="bottom_section">
+    
+    <form action="save_url" method="post">
+        <label>ISBN
+          <input name="isbn13" type="text" readonly="readonly" value="${book.isbn13}" autofocus="autofocus"/>
+        </label><br/>
+        
+        <label>Title
+          <input name="title" type="text" readonly="readonly" value="${book.title}"/>
+        </label><br/>
+        
+        <label>Author
+          <input name="author_string" type="text" readonly="readonly" value="${book.author_string()}"/>
+        </label><br/>
+        
+        <label>Publisher
+          <select id="publisher" name="publisher">
+            <option tal:repeat="pub publishers"
+              tal:attributes="selected 'selected' if pub is book.publisher else None">
+              <span tal:replace="pub">Publisher Name</span>
+            </option>
+          </select>
+        </label><br/>
+        
+        <label>Binding
+          <select id="binding" name="binding">
+            <option tal:repeat="bind bindings"
+              tal:attributes="selected 'selected' if bind is book.binding else None">
+              <span tal:replace="bind">Binding</span>
+            </option>
+          </select>
+        </label><br/>
+        
+        <label>Location
+          <select id="location" name="shelf_location">
+            <option tal:repeat="loc locations"
+              tal:attributes="selected 'selected' if loc is book.shelf_location else None">
+              <span tal:replace="loc">Shelf Location</span>
+            </option>
+          </select>
+        </label><br/>
+        
+        <input type="submit" name="form.submitted" value="Save"/>
+    </form>
+  </div>
+</body>
+</html>
+
