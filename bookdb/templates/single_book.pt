@@ -1,99 +1,62 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      xmlns:tal="http://xml.zope.org/namespaces/tal">
-<head>
-  <title>BMBR Book Database</title>
-  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-  <meta name="keywords" content="python web application" />
-  <meta name="description" content="pyramid web application" />
-  <link rel="shortcut icon"
-        href="${request.static_url('bookdb:static/favicon.ico')}" />
-  <link rel="stylesheet"
-        href="${request.static_url('bookdb:static/pylons.css')}"
-        type="text/css" media="screen" charset="utf-8" />
-  <!--[if lte IE 6]>
-  <link rel="stylesheet"
-        href="${request.static_url('bookdb:static/ie6.css')}"
-        type="text/css" media="screen" charset="utf-8" />
-  <![endif]-->
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal">
+<head metal:use-macro="shared.macros['standard_head']">
 </head>
-<body>
-  <div id="wrap">
-    <div id="top-small">
-      <div class="top-small align-center">
-        <div>
-          <img width="220" height="50" alt="pyramid"
-        src="${request.static_url('bookdb:static/pyramid-small.png')}" />
-        </div>
-      </div>
-    </div>
-    <div id="middle">
-      <div class="middle align-right">
-        <div id="left" class="app-welcome align-left">
-          <b tal:condition="not editable">View a Book</b>
-          <b tal:condition="editable">Edit a Book</b><br/>
-        </div>
-        <div id="right" class="app-welcome align-right">
-          <span tal:condition="logged_in">
-            <a href="${request.application_url}/logout">Logout</a>
-          </span>
-        </div>
-      </div>
-    </div>
-    <div id="bottom">
-      <div class="bottom">
-        <?python readonly = None if editable else 'readonly'?>
-        <form tal:attributes="action None if not editable else save_url"
-          method="post">
-            <label for="isbn">ISBN</label>
-            <input id="isbn" name="isbn13" type="text" tal:attributes="readonly readonly"
-                value="${book.isbn13}" autofocus="autofocus"/><br/>
-            <label for="title">Title</label>
-            <input id="title" name="title" type="text" tal:attributes="readonly readonly"
-                value="${book.title}"/><br/>
-            <label for="author">Author</label>
-            <input id="author" name="author_string" type="text" tal:attributes="readonly readonly"
-                value="${book.author_string()}"/><br/>
-            <label for="publisher">Publisher</label>
-            <input id="publisher" type="text" readonly="readonly"
-                value="${book.publisher}" tal:condition="not editable"/>
-            <select id="publisher" name="publisher" tal:condition="editable">
-              <option tal:repeat="pub publishers"
-                tal:attributes="selected 'selected' if pub is book.publisher else None">
-                <span tal:replace="pub">Publisher Name</span>
-              </option>
-            </select><br/>
-            <label for="binding">Binding</label>
-            <input id="binding" type="text" readonly="readonly"
-                value="${book.binding}" tal:condition="not editable"/>
-            <select id="binding" name="binding" tal:condition="editable">
-              <option tal:repeat="bind bindings"
-                tal:attributes="selected 'selected' if bind is book.binding else None">
-                <span tal:replace="bind">Binding</span>
-              </option>
-            </select><br/>
-            <label for="location">Location</label>
-            <input id="location" type="text" readonly="readonly"
-                value="${book.shelf_location}" tal:condition="not editable"/>
-            <select id="location" name="shelf_location" tal:condition="editable">
-              <option tal:repeat="loc locations"
-                tal:attributes="selected 'selected' if loc is book.shelf_location else None">
-                <span tal:replace="loc">Shelf Location</span>
-              </option>
-            </select><br/>
-            <input type="submit" name="form.submitted" value="Save"
-              tal:condition="editable"/>
-            <a href="edit"
-              tal:attributes="href edit_url" tal:condition="not editable">
-              Edit this Book</a>
-        </form>
-      </div>
-    </div>
+<body metal:use-macro="shared.macros['standard_body']">
+  <div metal:fill-slot="page_title">
+    <b tal:condition="not editable">View a Book</b>
+    <b tal:condition="editable">Edit a Book</b>
   </div>
-  <div id="footer">
-    <div class="footer"
-         >&copy; Copyright 2008-2011, Agendaless Consulting.</div>
+  <div metal:fill-slot="bottom_section">
+    <?python readonly = None if editable else 'readonly'?>
+    <form tal:attributes="action None if not editable else save_url"
+      method="post">
+        <label for="isbn">ISBN</label>
+        <input id="isbn" name="isbn13" type="text" tal:attributes="readonly readonly"
+            value="${book.isbn13}" autofocus="autofocus"/><br/>
+        <label for="title">Title</label>
+        <input id="title" name="title" type="text" tal:attributes="readonly readonly"
+            value="${book.title}"/><br/>
+        <label for="author">Author</label>
+        <input id="author" name="author_string" type="text" tal:attributes="readonly readonly"
+            value="${book.author_string()}"/><br/>
+        <label for="publisher">Publisher</label>
+        <input id="publisher" type="text" readonly="readonly"
+            value="${book.publisher}" tal:condition="not editable"/>
+        <select id="publisher" name="publisher" tal:condition="editable">
+          <option tal:repeat="pub publishers"
+            tal:attributes="selected 'selected' if pub is book.publisher else None">
+            <span tal:replace="pub">Publisher Name</span>
+          </option>
+        </select><br/>
+        <label for="binding">Binding</label>
+        <input id="binding" type="text" readonly="readonly"
+            value="${book.binding}" tal:condition="not editable"/>
+        <select id="binding" name="binding" tal:condition="editable">
+          <option tal:repeat="bind bindings"
+            tal:attributes="selected 'selected' if bind is book.binding else None">
+            <span tal:replace="bind">Binding</span>
+          </option>
+        </select><br/>
+        <label for="location">Location</label>
+        <input id="location" type="text" readonly="readonly"
+            value="${book.shelf_location}" tal:condition="not editable"/>
+        <select id="location" name="shelf_location" tal:condition="editable">
+          <option tal:repeat="loc locations"
+            tal:attributes="selected 'selected' if loc is book.shelf_location else None">
+            <span tal:replace="loc">Shelf Location</span>
+          </option>
+        </select><br/>
+        <input type="submit" name="form.submitted" value="Save"
+          tal:condition="editable"/>
+        <a href="edit"
+          tal:attributes="href edit_url" tal:condition="not editable">
+          Edit this Book</a>
+    </form>
   </div>
 </body>
 </html>
+
