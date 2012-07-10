@@ -13,7 +13,7 @@
   </div>
   <div metal:fill-slot="bottom_section">
     
-    <form action="save_url" method="post">
+    <form action="${save_url}" method="post">
         <label>ISBN
           <input name="isbn13" type="text" value="${book.isbn13}" autofocus="autofocus"/>
         </label><br/>
