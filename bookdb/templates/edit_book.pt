@@ -15,15 +15,15 @@
     
     <form action="save_url" method="post">
         <label>ISBN
-          <input name="isbn13" type="text" readonly="readonly" value="${book.isbn13}" autofocus="autofocus"/>
+          <input name="isbn13" type="text" value="${book.isbn13}" autofocus="autofocus"/>
         </label><br/>
         
         <label>Title
-          <input name="title" type="text" readonly="readonly" value="${book.title}"/>
+          <input name="title" type="text" value="${book.title}"/>
         </label><br/>
         
         <label>Author
-          <input name="author_string" type="text" readonly="readonly" value="${book.author_string()}"/>
+          <input name="author_string" type="text" value="${book.author_string()}"/>
         </label><br/>
         
         <label>Publisher
