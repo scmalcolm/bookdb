@@ -20,7 +20,7 @@
       </thead>
       <tbody>
         <tr tal:repeat="order orders">
-          <td tal:content="order.po"></td>
+          <td><a tal:attributes="href request.route_url('view_order', po=order.po)" tal:content="order.po"/></td>
           <td tal:content="order.distributor"></td>
           <td tal:content="order.date"></td>
         </tr>
