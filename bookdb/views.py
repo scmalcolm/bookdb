@@ -207,6 +207,7 @@ def add_order(request):
 def edit_order(request):
     po = request.matchdict['po']
     order = DBSession.query(Order).filter_by(po=po).one()
+    message = ''
     if 'header.submitted' in request.params:
         po = request.params['po']
         order_date = parse_date(request.params['order_date'])
@@ -223,18 +224,31 @@ def edit_order(request):
         order.comment = comment
         DBSession.add(order)
         return HTTPFound(location=request.route_url('list_orders'))
-    if 'new_entry.submitted' in request.params:
-        book = DBSession.query(Book).filter_by(isbn13=request.params['isbn13']).one()
-        quantity = request.params['quantity']
-        ## TODO: validate the new entry
-        entry = OrderEntry(order, book, quantity)
-        DBSession.add(entry)
-        return HTTPFound(location=request.route_url('edit_order', po=po))
+    elif 'new_entry.submitted' in request.params:
+        try:
+            book = DBSession.query(Book).filter_by(isbn13=request.params['isbn13']).one()
+        except:
+            book = None
+        try:
+            quantity = int(request.params['quantity'])
+            assert quantity > 0
+        except:
+            quantity = None
+        if book is None:
+            pass
+            message = "Invalid ISBN ({})! No such book".format(request.params['isbn13'])
+        elif quantity is None:
+            pass
+            message = "Invalid quantity ({})! Must be a positive integer.".format(quantity)
+        else:
+            DBSession.add(OrderEntry(order, book, quantity))
+            return HTTPFound(location=request.route_url('edit_order', po=po))
     shared_template = get_renderer('templates/shared.pt').implementation()
     shipping_methods = DBSession.query(ShippingMethod).all()
     distributors = DBSession.query(Distributor).all()
     return dict(shared=shared_template,
                 order=order,
+                message=message,
                 save_url=request.route_url('edit_order', po=po),
                 logged_in=authenticated_userid(request),
                 shipping_methods=shipping_methods,
