@@ -74,7 +74,7 @@ def add_book(request):
         # TODO: validate data
         new_book = Book(isbn13, title, publisher, binding, shelf_location, authors=authors)
         DBSession.add(new_book)
-        return HTTPFound(location=request.route_url('view_book', isbn13=isbn13))
+        return HTTPFound(location=request.route_url('add_book'))
     save_url = request.route_url('add_book')
     book = Book('', '', '', '', '', [])
     bindings = DBSession.query(Binding).all()
