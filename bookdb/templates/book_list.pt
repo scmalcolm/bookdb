@@ -26,7 +26,7 @@
           </thead>
           <tbody>
             <tr tal:repeat="book books">
-              <td tal:content="book.isbn13"></td>
+              <td><a tal:attributes="href request.route_url('view_book', isbn13=book.isbn13)" tal:content="book.isbn13"/></td>
               <td tal:content="book.title"></td>
               <td tal:content="book.author_name"></td>
               <td tal:content="book.publisher"></td>

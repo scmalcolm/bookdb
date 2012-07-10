@@ -46,15 +46,7 @@ class Book(Base):
         self.publisher = publisher
         self.binding = binding
         self.shelf_location = shelf_location
-        author_list = []
-        for author in authors:
-            lname = author[0]
-            try:
-                fname = author[1]
-            except:
-                fname = None
-            author_list.append(Author(lname, fname))
-        self.authors = author_list
+        self.authors = authors
 
     def author_lastname(self):
         return self.authors[0].lastname
@@ -66,14 +58,24 @@ class Book(Base):
 class Author(Base):
     __tablename__ = 'authors'
     author_id = Column(Integer, primary_key=True)
-    book_id = Column(Integer, ForeignKey('books.book_id'))
+    book_id = Column(Integer, ForeignKey('books.book_id'), nullable=False)
     lastname = Column(String)
     firstname = Column(String)
     book = relationship("Book", back_populates="authors")
 
     @classmethod
     def parse_author_string(cls, string):
-        return [a for a in map(lambda(x): x.split(', '), string.split('; '))]
+        result = []
+        authors = string.split('; ')
+        for a in authors:
+            try:
+                (lname, fname) = a.split(', ')
+            except:
+                lname = a
+                fname = None
+            result.append(Author(lname, fname))
+        return result
+        #return [a for a in map(lambda(x): x.split(', '), string.split('; '))]
 
     @classmethod
     def create_author_string(cls, authors):

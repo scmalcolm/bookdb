@@ -70,7 +70,10 @@ def add_book(request):
                             binding=request.params['binding']).one()
         shelf_location = DBSession.query(ShelfLocation).filter_by(
                             location=request.params['shelf_location']).one()
-        authors = Author.parse_author_string(author_string)
+        if author_string == '':
+            authors = []
+        else:
+            authors = Author.parse_author_string(author_string)
         # TODO: validate data
         new_book = Book(isbn13, title, publisher, binding, shelf_location, authors=authors)
         DBSession.add(new_book)
@@ -99,7 +102,11 @@ def edit_book(request):
         # TODO: Validate data before accepting it.
         book.isbn13 = request.params['isbn13']
         book.title = request.params['title']
-        book.authors = Author.parse_author_string(request.params['author_string'])
+        author_string = request.params['author_string']
+        if author_string == '':
+            book.authors = []
+        else:
+            book.authors = Author.parse_author_string(author_string)
         book.publisher = DBSession.query(Publisher).filter_by(
                             short_name=request.params['publisher']).one()
         book.binding = DBSession.query(Binding).filter_by(
