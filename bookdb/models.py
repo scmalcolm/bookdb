@@ -209,7 +209,7 @@ class Binding(Base):
 class ShippingMethod(Base):
     __tablename__ = 'shipping_methods'
     shipping_id = Column(Integer, primary_key=True)
-    shipping_method = Column(Text)
+    shipping_method = Column(Text, unique=True)
 
     def __init__(self, shipping_method):
         self.shipping_method = shipping_method
