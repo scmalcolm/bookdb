@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal">
+<head metal:use-macro="shared.macros['standard_head']">
+</head>
+<body metal:use-macro="shared.macros['standard_body']">
+  <div metal:fill-slot="page_title">
+    
+    <b>Edit a Distributor</b>
+
+  </div>
+  <div metal:fill-slot="bottom_section">
+    
+    <form action="${save_url}" method="post">
+      <label>Short Name
+        <input name="short_name" type="text" value="${distributor.short_name}"/>
+      </label>
+      
+      <label>Full Name
+        <input name="full_name" type="text" value="${distributor.full_name}"/>
+      </label>
+      
+      <label>Account Number
+        <input name="account_number" type="text" value="${distributor.account_number}"/>
+      </label>
+      
+      <label>Phone
+        <input name="phone" type="text" value="${distributor.phone}"/>
+      </label>
+      
+      <label>Fax
+        <input name="fax" type="text" value="${distributor.fax}"/>
+      </label>
+      
+      <label>Email
+        <input name="email" type="text" value="${distributor.email}"/>
+      </label>
+
+      <label>Address Line 1
+        <input name="address1" type="text" value="${distributor.address1}"/>
+      </label>
+
+      <label>Address Line 2
+        <input name="address2" type="text" value="${distributor.address2}"/>
+      </label>
+
+      <label>City
+        <input name="city" type="text" value="${distributor.city}"/>
+      </label>
+
+      <label>Province
+        <input name="province" type="text" value="${distributor.province}"/>
+      </label>
+
+      <label>Postal Code
+        <input name="postal_code" type="text" value="${distributor.postal_code}"/>
+      </label>
+
+      <label>Country
+        <input name="country" type="text" value="${distributor.country}"/>
+      </label>
+
+      <label>Sales Rep
+        <input name="sales_rep" type="text" value="${distributor.sales_rep}"/>
+      </label>
+      
+      <input type="submit" name="form.submitted" value="Save"/>
+    </form>
+
+  </div>
+</body>
+</html>
+

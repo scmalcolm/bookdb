@@ -313,19 +313,68 @@ def distributor_view(request):
                 )
 
 
-@view_config(route_name='distributor_add', renderer='templates/distributor_add.pt', permission='edit')
+@view_config(route_name='distributor_add', renderer='templates/distributor_edit.pt', permission='edit')
 def distributor_add(request):
-    return HTTPNotFound('view not implemented')
+    if 'form.submitted' in request.params:
+        short_name = request.params['short_name']
+        full_name = request.params['full_name']
+        account_number = request.params['account_number']
+        sales_rep = request.params['sales_rep']
+        phone = request.params['phone']
+        fax = request.params['fax']
+        email = request.params['email']
+        address1 = request.params['address1']
+        address2 = request.params['address2']
+        city = request.params['city']
+        province = request.params['province']
+        postal_code = request.params['postal_code']
+        country = request.params['country']
+        distributor = Distributor(short_name, full_name, account_number, sales_rep, phone,
+            fax, email, address1, address2, city, province, postal_code, country)
+        DBSession.add(distributor)
+        return HTTPFound(request.route_url('distributor_view', short_name=short_name))
+    distributor = Distributor('')
+    shared_template = get_renderer('templates/shared.pt').implementation()
+    return dict(shared=shared_template,
+                distributor=distributor,
+                logged_in=authenticated_userid(request),
+                save_url=request.route_url('distributor_add'),
+                )
 
 
 @view_config(route_name='distributor_edit', renderer='templates/distributor_edit.pt', permission='edit')
 def distributor_edit(request):
-    return HTTPNotFound('view not implemented')
+    name = request.matchdict['short_name']
+    distributor = DBSession.query(Distributor).filter_by(short_name=name).one()
+    if 'form.submitted' in request.params:
+        distributor.short_name = request.params['short_name']
+        distributor.full_name = request.params['full_name']
+        distributor.account_number = request.params['account_number']
+        distributor.sales_rep = request.params['sales_rep']
+        distributor.phone = request.params['phone']
+        distributor.fax = request.params['fax']
+        distributor.email = request.params['email']
+        distributor.address1 = request.params['address1']
+        distributor.address2 = request.params['address2']
+        distributor.city = request.params['city']
+        distributor.province = request.params['province']
+        distributor.postal_code = request.params['postal_code']
+        distributor.country = request.params['country']
+        return HTTPFound(request.route_url('distributor_list'))
+    shared_template = get_renderer('templates/shared.pt').implementation()
+    return dict(shared=shared_template,
+                distributor=distributor,
+                logged_in=authenticated_userid(request),
+                save_url=request.route_url('distributor_edit', short_name=name),
+                )
 
 
 @view_config(route_name='distributor_delete', permission='edit')
 def distributor_delete(request):
-    return HTTPNotFound('view not implemented')
+    name = request.matchdict['short_name']
+    distributor = DBSession.query(Distributor).filter_by(short_name=name).one()
+    DBSession.delete(distributor)
+    return HTTPFound(request.route_url('distributor_list'))
 
 
 @view_config(route_name='login', renderer='templates/login.pt')
