@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal">
+<head metal:use-macro="shared.macros['standard_head']">
+</head>
+<body metal:use-macro="shared.macros['standard_body']">
+  <div metal:fill-slot="page_title">
+
+    <b>View a List of Distributors</b>
+
+  </div>
+  <div metal:fill-slot="bottom_section">
+
+    <h2>Distributors</h2>
+    <ul>
+      <li tal:repeat="dist distributors">
+        <a tal:attributes="href distributor_url(dist.short_name)" tal:content="dist.short_name"/>
+      </li>
+    </ul>
+
+  </div>
+</body>
+</html>

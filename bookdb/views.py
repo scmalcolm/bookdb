@@ -290,6 +290,44 @@ def order_entry_delete(request):
     return HTTPFound(location=request.route_url('order_edit', po=po))
 
 
+@view_config(route_name='distributor_list', renderer='templates/distributor_list.pt')
+def distributor_list(request):
+    distributors = DBSession.query(Distributor).all()
+    shared_template = get_renderer('templates/shared.pt').implementation()
+    return dict(shared=shared_template,
+                distributors=distributors,
+                logged_in=authenticated_userid(request),
+                distributor_url=lambda name: request.route_url('distributor_view', short_name=name),
+                )
+
+
+@view_config(route_name='distributor_view', renderer='templates/distributor_view.pt')
+def distributor_view(request):
+    name = request.matchdict['short_name']
+    distributor = DBSession.query(Distributor).filter_by(short_name=name).one()
+    shared_template = get_renderer('templates/shared.pt').implementation()
+    return dict(shared=shared_template,
+                distributor=distributor,
+                logged_in=authenticated_userid(request),
+                edit_url=request.route_url('distributor_edit', short_name=name),
+                )
+
+
+@view_config(route_name='distributor_add', renderer='templates/distributor_add.pt', permission='edit')
+def distributor_add(request):
+    return HTTPNotFound('view not implemented')
+
+
+@view_config(route_name='distributor_edit', renderer='templates/distributor_edit.pt', permission='edit')
+def distributor_edit(request):
+    return HTTPNotFound('view not implemented')
+
+
+@view_config(route_name='distributor_delete', permission='edit')
+def distributor_delete(request):
+    return HTTPNotFound('view not implemented')
+
+
 @view_config(route_name='login', renderer='templates/login.pt')
 @forbidden_view_config(renderer='templates/login.pt')
 def login(request):
