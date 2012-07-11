@@ -7,9 +7,12 @@
 </head>
 <body metal:use-macro="shared.macros['standard_body']">
   <div metal:fill-slot="page_title">
+
     <b>List of Orders</b>
+
   </div>
   <div metal:fill-slot="bottom_section">
+
     <table id="order_table">
       <thead>
         <tr>
@@ -20,12 +23,13 @@
       </thead>
       <tbody>
         <tr tal:repeat="order orders">
-          <td><a tal:attributes="href request.route_url('view_order', po=order.po)" tal:content="order.po"/></td>
+          <td><a tal:attributes="href order_url(order.po)" tal:content="order.po"/></td>
           <td tal:content="order.distributor"></td>
           <td tal:content="order.date"></td>
         </tr>
       </tbody>
     </table>
+    
   </div>
 </body>
 </html>

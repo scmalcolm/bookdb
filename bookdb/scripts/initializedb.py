@@ -22,6 +22,7 @@ from ..models import (
     ShelfLocation,
     ShippingMethod,
     OrderEntry,
+    Author,
     )
 
 
@@ -57,7 +58,7 @@ def main(argv=sys.argv):
                     publishers[1],
                     bindings[0],
                     locations[0],
-                    authors=[('Dickens', 'Charles')],
+                    authors=[Author('Dickens', 'Charles')],
                     )
         DBSession.add(book)
         order = Order('1A1000',
