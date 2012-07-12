@@ -1,58 +1,54 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      xmlns:tal="http://xml.zope.org/namespaces/tal"
-      xmlns:metal="http://xml.zope.org/namespaces/metal">
-<head metal:use-macro="shared.macros['standard_head']">
-</head>
-<body metal:use-macro="shared.macros['standard_body']">
-  <div metal:fill-slot="page_title">
+<html metal:use-macro="load: master.pt">
 
-    <b>Edit an Order</b>
-    
-  </div>
-  <div metal:fill-slot="bottom_section">
-    
-    <div class="order-header">
-      <label>PO 
-        <input type="text" value="${order.po}" readonly="readonly"/>
-      </label><br/>
-      <label>Distributor
-        <input type="text" value="${order.distributor}" readonly="readonly"/>
-      </label><br/>
-      <label>Shipping Method
-        <input type="text" value="${order.shipping_method}" readonly="readonly"/>
-      </label><br/>
-      <label>Date 
-        <input type="date" value="${order.date}" readonly="readonly"/>
-      </label><br/>
-      <label>Special Instructions 
-        <input type="text" value="${order.comment}" readonly="readonly"/>
-      </label><br/>
-      <a href="${edit_url}">Edit Order</a>
-      <a href="${pdf_url}">Make PDF</a>
-    </div>
-    <div class="order-entries">
-      <table>
-        <thead>
-          <tr>
-            <th>Qty</th>
-            <th>ISBN</th>
-            <th>Title</th>
-            <th>Publisher</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr tal:repeat="entry order.order_entries">
-            <td tal:content="entry.quantity">#</td>
-            <td tal:content="entry.book.isbn13">isbn</td>
-            <td tal:content="entry.book.title">book title</td>
-            <td tal:content="entry.book.publisher">publisher</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+<div metal:fill-slot="top_section">
+  <b>Edit an Order</b>
+</div>
 
+<div metal:fill-slot="main_section">
+  <div class="order-header">
+    <label>PO 
+      <input type="text" value="${order.po}" readonly="readonly" />
+    </label>
+    
+    <label>Distributor
+      <input type="text" value="${order.distributor}" readonly="readonly" />
+    </label>
+    
+    <label>Shipping Method
+      <input type="text" value="${order.shipping_method}" readonly="readonly" />
+    </label>
+    
+    <label>Date 
+      <input type="date" value="${order.date}" readonly="readonly" />
+    </label>
+    
+    <label>Special Instructions 
+      <input type="text" value="${order.comment}" readonly="readonly" />
+    </label>
+    
+    <a href="${edit_url}">Edit Order</a>
+    <a href="${pdf_url}">Make PDF</a>
   </div>
-</body>
+  <div class="order-entries">
+    <table>
+      <thead>
+        <tr>
+          <th>Qty</th>
+          <th>ISBN</th>
+          <th>Title</th>
+          <th>Publisher</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr tal:repeat="entry order.order_entries">
+          <td tal:content="entry.quantity">#</td>
+          <td tal:content="entry.book.isbn13">isbn</td>
+          <td tal:content="entry.book.title">book title</td>
+          <td tal:content="entry.book.publisher">publisher</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
 </html>

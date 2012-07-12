@@ -1,47 +1,37 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      xmlns:tal="http://xml.zope.org/namespaces/tal"
-      xmlns:metal="http://xml.zope.org/namespaces/metal">
-<head metal:use-macro="shared.macros['standard_head']">
-</head>
-<body metal:use-macro="shared.macros['standard_body']">
-  <div metal:fill-slot="page_title">
+<html metal:use-macro="load: master.pt">
 
-    <b>View a Book</b>
-  
-  </div>
-  <div metal:fill-slot="bottom_section">
+<div metal:fill-slot="top_section">
+  <b>View a Book</b>
+</div>
 
-    <form>
-        <label>ISBN
-          <input type="text" readonly="readonly" value="${book.isbn13}"/>
-        </label><br/>
-        
-        <label>Title
-          <input type="text" readonly="readonly" value="${book.title}"/>
-        </label><br/>
-        
-        <label>Author
-          <input type="text" readonly="readonly" value="${book.author_string()}"/>
-        </label><br/>
-        
-        <label>Publisher
-          <input type="text" readonly="readonly" value="${book.publisher}"/>
-        </label><br/>
-        
-        <label>Binding
-          <input type="text" readonly="readonly" value="${book.binding}"/>
-        </label><br/>
-        
-        <label>Location
-          <input type="text" readonly="readonly" value="${book.shelf_location}"/>
-        </label><br/>
-        
-        <a href="edit" tal:attributes="href edit_url">Edit this Book</a>
-    </form>
+<div metal:fill-slot="main_section">
+  <form>
+    <label>ISBN
+      <input type="text" readonly="readonly" value="${book.isbn13}" />
+    </label>
+    
+    <label>Title
+      <input type="text" readonly="readonly" value="${book.title}" />
+    </label>
+    
+    <label>Author
+      <input type="text" readonly="readonly" value="${book.author_string()}" />
+    </label>
+    
+    <label>Publisher
+      <input type="text" readonly="readonly" value="${book.publisher}" />
+    </label>
+    
+    <label>Binding
+      <input type="text" readonly="readonly" value="${book.binding}" />
+    </label>
+    
+    <label>Location
+      <input type="text" readonly="readonly" value="${book.shelf_location}" />
+    </label>
+    
+    <a href="edit" tal:attributes="href edit_url">Edit this Book</a>
+  </form>
+</div>
 
-  </div>
-</body>
 </html>
-

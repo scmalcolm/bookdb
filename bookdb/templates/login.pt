@@ -1,29 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      xmlns:tal="http://xml.zope.org/namespaces/tal"
-      xmlns:metal="http://xml.zope.org/namespaces/metal">
-<head metal:use-macro="shared.macros['standard_head']">
-</head>
-<body metal:use-macro="shared.macros['standard_body']">
-  <div metal:fill-slot="page_title">
+<html metal:use-macro="load: master.pt">
 
-    <b>Login</b><br/>
-    <span tal:replace="message"/>
+<div metal:fill-slot="top_section">
+  <b>Login</b><br/>
+  <span tal:replace="message"/>
+</div>
 
-  </div>
-  <div metal:fill-slot="bottom_section">
-    
-    <div class="bottom">
-      <form action="${url}" method="post">
-        <input type="hidden" name="came_from" value="${came_from}"/>
-        <input type="text" name="login" value="${login}"/><br/>
-        <input type="password" name="password"
-               value="${password}"/><br/>
-        <input type="submit" name="form.submitted" value="Log In"/>
-      </form>
-    </div>
+<div metal:fill-slot="main_section">
+  <form action="${url}" method="post">
+    <input type="hidden" name="came_from" value="${came_from}" />
+    <label>Username
+      <input type="text" name="login" value="${login}" />
+    </label>
+    <label>Password
+      <input type="password" name="password" value="${password}"/>
+    </label>
+    <input type="submit" name="form.submitted" value="Log In" />
+  </form>
+</div>
 
-  </div>
-</body>
 </html>

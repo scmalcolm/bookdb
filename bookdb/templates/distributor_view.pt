@@ -1,75 +1,65 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      xmlns:tal="http://xml.zope.org/namespaces/tal"
-      xmlns:metal="http://xml.zope.org/namespaces/metal">
-<head metal:use-macro="shared.macros['standard_head']">
-</head>
-<body metal:use-macro="shared.macros['standard_body']">
-  <div metal:fill-slot="page_title">
+<html metal:use-macro="load: master.pt">
 
-    <b>View a Distributor</b>
-  
-  </div>
-  <div metal:fill-slot="bottom_section">
+<div metal:fill-slot="top_section">
+  <b>View a Distributor</b>
+</div>
 
-    <form>
-        <label>Short Name
-          <input type="text" readonly="readonly" value="${distributor.short_name}"/>
-        </label>
-        
-        <label>Full Name
-          <input type="text" readonly="readonly" value="${distributor.full_name}"/>
-        </label>
-        
-        <label>Account Number
-          <input type="text" readonly="readonly" value="${distributor.account_number}"/>
-        </label>
-        
-        <label>Phone
-          <input type="text" readonly="readonly" value="${distributor.phone}"/>
-        </label>
-        
-        <label>Fax
-          <input type="text" readonly="readonly" value="${distributor.fax}"/>
-        </label>
-        
-        <label>Email
-          <input type="text" readonly="readonly" value="${distributor.email}"/>
-        </label>
+<div metal:fill-slot="main_section">
+  <form>
+      <label>Short Name
+        <input type="text" readonly="readonly" value="${distributor.short_name}" />
+      </label>
+      
+      <label>Full Name
+        <input type="text" readonly="readonly" value="${distributor.full_name}" />
+      </label>
+      
+      <label>Account Number
+        <input type="text" readonly="readonly" value="${distributor.account_number}" />
+      </label>
+      
+      <label>Phone
+        <input type="text" readonly="readonly" value="${distributor.phone}" />
+      </label>
+      
+      <label>Fax
+        <input type="text" readonly="readonly" value="${distributor.fax}" />
+      </label>
+      
+      <label>Email
+        <input type="text" readonly="readonly" value="${distributor.email}" />
+      </label>
 
-        <label>Address Line 1
-          <input type="text" readonly="readonly" value="${distributor.address1}"/>
-        </label>
+      <label>Address Line 1
+        <input type="text" readonly="readonly" value="${distributor.address1}" />
+      </label>
 
-        <label>Address Line 2
-          <input type="text" readonly="readonly" value="${distributor.address2}"/>
-        </label>
+      <label>Address Line 2
+        <input type="text" readonly="readonly" value="${distributor.address2}" />
+      </label>
 
-        <label>City
-          <input type="text" readonly="readonly" value="${distributor.city}"/>
-        </label>
+      <label>City
+        <input type="text" readonly="readonly" value="${distributor.city}" />
+      </label>
 
-        <label>Province
-          <input type="text" readonly="readonly" value="${distributor.province}"/>
-        </label>
+      <label>Province
+        <input type="text" readonly="readonly" value="${distributor.province}" />
+      </label>
 
-        <label>Postal Code
-          <input type="text" readonly="readonly" value="${distributor.postal_code}"/>
-        </label>
+      <label>Postal Code
+        <input type="text" readonly="readonly" value="${distributor.postal_code}" />
+      </label>
 
-        <label>Country
-          <input type="text" readonly="readonly" value="${distributor.country}"/>
-        </label>
+      <label>Country
+        <input type="text" readonly="readonly" value="${distributor.country}" />
+      </label>
 
-        <label>Sales Rep
-          <input type="text" readonly="readonly" value="${distributor.sales_rep}"/>
-        </label>
+      <label>Sales Rep
+        <input type="text" readonly="readonly" value="${distributor.sales_rep}" />
+      </label>
 
-        <a href="edit" tal:attributes="href edit_url">Edit</a>
-    </form>
+      <a href="edit" tal:attributes="href edit_url">Edit</a>
+  </form>
+</div>
 
-  </div>
-</body>
 </html>
-

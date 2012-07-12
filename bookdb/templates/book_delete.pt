@@ -1,34 +1,37 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      xmlns:tal="http://xml.zope.org/namespaces/tal"
-      xmlns:metal="http://xml.zope.org/namespaces/metal">
-<head metal:use-macro="shared.macros['standard_head']">
-</head>
-<body metal:use-macro="shared.macros['standard_body']">
-  <div metal:fill-slot="page_title">
+<html metal:use-macro="load: master.pt">
 
-    <b>Delete a Book?</b>
+<div metal:fill-slot="top_section">
+  <b>Delete a Book?</b>
+</div>
 
-  </div>
-  <div metal:fill-slot="bottom_section">
-    
+<div metal:fill-slot="main_section">
     <form tal:attributes="action delete_url" method="post">
-        <label>ISBN<input id="isbn" name="isbn13" type="text"
-          readonly="readonly" value="${book.isbn13}"/></label><br/>
-        <label>Title<input id="title" name="title" type="text"
-          readonly="readonly" value="${book.title}"/></label><br/>
-        <label>Author<input id="author" name="author_name" type="text"
-          readonly="readonly" value="${book.author_name}"/></label><br/>
-        <label>Publisher<input id="publisher" type="text" readonly="readonly"
-          value="${book.publisher}"/></label><br/>
-        <label>Binding<input id="binding" type="text" readonly="readonly"
-          value="${book.binding}"/></label><br/>
-        <label>Location<input id="location" type="text" readonly="readonly"
-          value="${book.shelf_location}"/></label><br/>
-        <input type="submit" name="form.submitted" value="Delete this book!"/>
-      </form>
+      <label>ISBN
+        <input name="isbn13" type="text" readonly="readonly" value="${book.isbn13}" />
+      </label>
+      
+      <label>Title
+        <input name="title" type="text" readonly="readonly" value="${book.title}" />
+      </label>
+      
+      <label>Author
+        <input name="author_name" type="text" readonly="readonly" value="${book.author_name}" />
+      </label>
+      
+      <label>Publisher
+        <input name="publisher" type="text" readonly="readonly" value="${book.publisher}" />
+      </label>
+      
+      <label>Binding
+        <input name="binding" type="text" readonly="readonly" value="${book.binding}" />
+      </label>
+      
+      <label>Location
+        <input name="location" type="text" readonly="readonly" value="${book.shelf_location}" />
+      </label>
+      
+      <input type="submit" name="form.submitted" value="Delete this book!"/>
+    </form>
+</div>
 
-  </div>
-</body>
 </html>

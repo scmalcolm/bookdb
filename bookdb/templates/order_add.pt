@@ -1,41 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      xmlns:tal="http://xml.zope.org/namespaces/tal"
-      xmlns:metal="http://xml.zope.org/namespaces/metal">
-<head metal:use-macro="shared.macros['standard_head']">
-</head>
-<body metal:use-macro="shared.macros['standard_body']">
-  <div metal:fill-slot="page_title">
+<html metal:use-macro="load: master.pt">
 
-    <b>Edit an Order</b>
+<div metal:fill-slot="top_section">
+  <b>Edit an Order</b>
+</div>
 
-  </div>
-  <div metal:fill-slot="bottom_section">
+<div metal:fill-slot="main_section">
+  <div class="order-header">
+  <form action="${save_url}" method="post">
+    <label>PO <input name="po" type="text" value="" autofocus="autofocus" /></label>
+    <label>Distributor
+      <select name="distributor">
+        <option tal:repeat="distributor distributors">
+          <span tal:replace="distributor">Distribution Company</span>
+        </option>
+      </select>
+    </label>
+    <label>Shipping Method
+      <select name="shipping_method">
+        <option tal:repeat="method shipping_methods">
+          <span tal:replace="method">Ship by Tortise</span>
+        </option>
+      </select>
+    </label><br/>
+    <label>Date <input name="order_date" type="date" value="" /></label>
+    <label>Special Instructions <input name="comment" type="text" value="" /></label>
+    <input name="form.submitted" type="submit" method="save" value="Save Order Header" />
+  </form>
+</div>
+</div>
 
-    <div class="order-header">
-      <form action="${save_url}" method="post">
-        <label>PO <input name="po" type="text" value="" autofocus="autofocus"/></label><br/>
-        <label>Distributor
-          <select name="distributor">
-            <option tal:repeat="distributor distributors">
-              <span tal:replace="distributor">Distribution Company</span>
-            </option>
-          </select>
-        </label><br/>
-        <label>Shipping Method
-          <select name="shipping_method">
-            <option tal:repeat="method shipping_methods">
-              <span tal:replace="method">Ship by Tortise</span>
-            </option>
-          </select>
-        </label><br/>
-        <label>Date <input name="order_date" type="date" value=""/></label><br/>
-        <label>Special Instructions <input name="comment" type="text" value=""/></label><br/>
-        <input name="form.submitted" type="submit" method="save" value="Save Order Header"/>
-      </form>
-    </div>
-
-  </div>
-</body>
 </html>

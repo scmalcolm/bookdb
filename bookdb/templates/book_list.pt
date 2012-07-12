@@ -1,41 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      xmlns:tal="http://xml.zope.org/namespaces/tal"
-      xmlns:metal="http://xml.zope.org/namespaces/metal">
-<head metal:use-macro="shared.macros['standard_head']">
-</head>
-<body metal:use-macro="shared.macros['standard_body']">
-  <div metal:fill-slot="page_title">
+<html metal:use-macro="load: master.pt">
 
-    <b>View a List of Books</b>
+<div metal:fill-slot="top_section">
+  <b>View a List of Books</b>
+</div>
 
-  </div>
-  <div metal:fill-slot="bottom_section">
+<div metal:fill-slot="main_section">
+  <table id="book_table">
+    <thead>
+      <tr>
+        <th>ISBN</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Publisher</th>
+        <th>Binding</th>
+        <th>Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr tal:repeat="book books">
+        <td><a tal:attributes="href book_url(book.isbn13)" tal:content="book.isbn13" /></td>
+        <td tal:content="book.title"></td>
+        <td tal:content="book.author_name"></td>
+        <td tal:content="book.publisher"></td>
+        <td tal:content="book.binding"></td>
+        <td tal:content="book.shelf_location"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-    <table id="book_table">
-      <thead>
-        <tr>
-          <th>ISBN</th>
-          <th>Title</th>
-          <th>Author</th>
-          <th>Publisher</th>
-          <th>Binding</th>
-          <th>Location</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr tal:repeat="book books">
-          <td><a tal:attributes="href book_url(book.isbn13)" tal:content="book.isbn13"/></td>
-          <td tal:content="book.title"></td>
-          <td tal:content="book.author_name"></td>
-          <td tal:content="book.publisher"></td>
-          <td tal:content="book.binding"></td>
-          <td tal:content="book.shelf_location"></td>
-        </tr>
-      </tbody>
-    </table>
-
-  </div>
-</body>
 </html>
