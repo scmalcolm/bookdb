@@ -44,14 +44,12 @@ def front_page(request):
 
 @view_config(route_name='book_view', renderer='templates/book_view.pt')
 def book_view(request):
-    shared_template = get_renderer('templates/shared.pt').implementation()
     isbn13 = request.matchdict['isbn13']
     book = DBSession.query(Book).filter_by(isbn13=isbn13).first()
     if book is None:
         return HTTPNotFound('No such book')
     edit_url = request.route_url('book_edit', isbn13=isbn13)
-    return dict(shared=shared_template,
-                book=book,
+    return dict(book=book,
                 edit_url=edit_url,
                 logged_in=authenticated_userid(request),
                 )
@@ -59,7 +57,6 @@ def book_view(request):
 
 @view_config(route_name='book_add', renderer='templates/book_edit.pt', permission='edit')
 def book_add(request):
-    shared_template = get_renderer('templates/shared.pt').implementation()
     if 'form.submitted' in request.params:
         isbn13 = request.params['isbn13']
         title = request.params['title']
@@ -83,8 +80,7 @@ def book_add(request):
     bindings = DBSession.query(Binding).all()
     locations = DBSession.query(ShelfLocation).all()
     publishers = DBSession.query(Publisher).all()
-    return dict(shared=shared_template,
-                book=book,
+    return dict(book=book,
                 save_url=save_url,
                 logged_in=authenticated_userid(request),
                 bindings=bindings,
@@ -95,7 +91,6 @@ def book_add(request):
 
 @view_config(route_name='book_edit', renderer='templates/book_edit.pt', permission='edit')
 def book_edit(request):
-    shared_template = get_renderer('templates/shared.pt').implementation()
     isbn13 = request.matchdict['isbn13']
     book = DBSession.query(Book).filter_by(isbn13=isbn13).one()
     if 'form.submitted' in request.params:
@@ -118,8 +113,7 @@ def book_edit(request):
     bindings = DBSession.query(Binding).all()
     locations = DBSession.query(ShelfLocation).all()
     publishers = DBSession.query(Publisher).all()
-    return dict(shared=shared_template,
-                book=book,
+    return dict(book=book,
                 save_url=request.route_url('book_edit', isbn13=isbn13),
                 logged_in=authenticated_userid(request),
                 bindings=bindings,
@@ -130,14 +124,12 @@ def book_edit(request):
 
 @view_config(route_name='book_delete', renderer='templates/book_delete.pt', permission='edit')
 def book_delete(request):
-    shared_template = get_renderer('templates/shared.pt').implementation()
     isbn13 = request.matchdict['isbn13']
     book = DBSession.query(Book).filter_by(isbn13=isbn13).one()
     if 'form.submitted' in request.params:
         DBSession.delete(book)
         return HTTPFound(location=request.route_url('book_list'))
-    return dict(shared=shared_template,
-                book=book,
+    return dict(book=book,
                 delete_url=request.route_url('book_delete', isbn13=isbn13),
                 logged_in=authenticated_userid(request),
                 )
@@ -145,10 +137,8 @@ def book_delete(request):
 
 @view_config(route_name='book_list', renderer='templates/book_list.pt')
 def book_list(request):
-    shared_template = get_renderer('templates/shared.pt').implementation()
     books = DBSession.query(Book).all()
-    return dict(shared=shared_template,
-                books=books,
+    return dict(books=books,
                 logged_in=authenticated_userid(request),
                 book_url=lambda isbn13: request.route_url('book_view', isbn13=isbn13)
                 )
@@ -156,10 +146,8 @@ def book_list(request):
 
 @view_config(route_name='order_list', renderer='templates/order_list.pt')
 def order_list(request):
-    shared_template = get_renderer('templates/shared.pt').implementation()
     orders = DBSession.query(Order).all()
-    return dict(shared=shared_template,
-                orders=orders,
+    return dict(orders=orders,
                 logged_in=authenticated_userid,
                 order_url=lambda po: request.route_url('order_view', po=po)
                 )
@@ -167,11 +155,9 @@ def order_list(request):
 
 @view_config(route_name='order_view', renderer='templates/order_view.pt')
 def order_view(request):
-    shared_template = get_renderer('templates/shared.pt').implementation()
     po = request.matchdict['po']
     order = DBSession.query(Order).filter_by(po=po).one()
-    return dict(shared=shared_template,
-                order=order,
+    return dict(order=order,
                 edit_url=request.route_url('order_edit', po=po),
                 pdf_url=request.route_url('order_pdf', po=po),
                 logged_in=authenticated_userid(request),
@@ -200,12 +186,10 @@ def order_add(request):
         new_order = Order(po, date, distributor, shipping_method, comment)
         DBSession.add(new_order)
         return HTTPFound(request.route_url('order_edit', po=po))
-    shared_template = get_renderer('templates/shared.pt').implementation()
     save_url = request.route_url('order_add')
     shipping_methods = DBSession.query(ShippingMethod).all()
     distributors = DBSession.query(Distributor).all()
-    return dict(shared=shared_template,
-                save_url=save_url,
+    return dict(save_url=save_url,
                 logged_in=authenticated_userid(request),
                 shipping_methods=shipping_methods,
                 distributors=distributors,
@@ -250,11 +234,9 @@ def order_edit(request):
         else:
             DBSession.add(OrderEntry(order, book, quantity))
             return HTTPFound(location=request.route_url('order_edit', po=po))
-    shared_template = get_renderer('templates/shared.pt').implementation()
     shipping_methods = DBSession.query(ShippingMethod).all()
     distributors = DBSession.query(Distributor).all()
-    return dict(shared=shared_template,
-                order=order,
+    return dict(order=order,
                 message=message,
                 save_url=request.route_url('order_edit', po=po),
                 logged_in=authenticated_userid(request),
@@ -271,9 +253,7 @@ def order_delete(request):
     if 'form.submitted' in request.params:
         DBSession.delete(order)
         return HTTPFound(location=request.route_url('order_list'))
-    shared_template = get_renderer('templates/shared.pt').implementation()
-    return dict(shared=shared_template,
-                order=order,
+    return dict(order=order,
                 delete_url=request.route_url('order_delete', po=po),
                 logged_in=authenticated_userid(request),
                 )
@@ -293,9 +273,7 @@ def order_entry_delete(request):
 @view_config(route_name='distributor_list', renderer='templates/distributor_list.pt')
 def distributor_list(request):
     distributors = DBSession.query(Distributor).all()
-    shared_template = get_renderer('templates/shared.pt').implementation()
-    return dict(shared=shared_template,
-                distributors=distributors,
+    return dict(distributors=distributors,
                 logged_in=authenticated_userid(request),
                 distributor_url=lambda name: request.route_url('distributor_view', short_name=name),
                 )
@@ -334,9 +312,7 @@ def distributor_add(request):
         DBSession.add(distributor)
         return HTTPFound(request.route_url('distributor_view', short_name=short_name))
     distributor = Distributor('')
-    shared_template = get_renderer('templates/shared.pt').implementation()
-    return dict(shared=shared_template,
-                distributor=distributor,
+    return dict(distributor=distributor,
                 logged_in=authenticated_userid(request),
                 save_url=request.route_url('distributor_add'),
                 )
@@ -361,9 +337,7 @@ def distributor_edit(request):
         distributor.postal_code = request.params['postal_code']
         distributor.country = request.params['country']
         return HTTPFound(request.route_url('distributor_list'))
-    shared_template = get_renderer('templates/shared.pt').implementation()
-    return dict(shared=shared_template,
-                distributor=distributor,
+    return dict(distributor=distributor,
                 logged_in=authenticated_userid(request),
                 save_url=request.route_url('distributor_edit', short_name=name),
                 )
@@ -403,9 +377,7 @@ def login(request):
             headers = remember(request, login)
             return HTTPFound(location=came_from, headers=headers)
         message = 'Failed login'
-    shared_template = get_renderer('templates/shared.pt').implementation()
-    return dict(shared=shared_template,
-                message=message,
+    return dict(message=message,
                 url=request.application_url + '/login',
                 came_from=came_from,
                 login=login,
