@@ -21,7 +21,7 @@
           <span tal:replace="method">Ship by Tortise</span>
         </option>
       </select>
-    </label><br/>
+    </label>
     <label>Date <input name="order_date" type="date" value="" /></label>
     <label>Special Instructions <input name="comment" type="text" value="" /></label>
     <input name="form.submitted" type="submit" method="save" value="Save Order Header" />
