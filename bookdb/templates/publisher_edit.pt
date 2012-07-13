@@ -1,0 +1,22 @@
+<html metal:use-macro="load: master.pt">
+
+<div metal:fill-slot="top_section">
+  <b>Edit a Book</b>
+</div>
+
+<div metal:fill-slot="main_section">
+  <form action="${save_url}" method="post">
+    <label>Short Name
+      <input name="short_name" type="text" value="${publisher.short_name}" autofocus="autofocus" />
+    </label>
+    
+    <label>Full Name
+      <input name="full_name" type="text" value="${publisher.full_name}" />
+    </label>
+    
+    <input type="submit" name="form.submitted" value="Save" />
+    <input type="submit" name="form.delete" value="Delete" />
+  </form>
+</div>
+
+</html>

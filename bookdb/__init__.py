@@ -47,7 +47,6 @@ def main(global_config, **settings):
     config.add_route('publisher_list',   '/publisher/list')
     config.add_route('publisher_add',    '/publisher/add')
     config.add_route('publisher_edit',   '/publisher/{short_name}/edit')
-    config.add_route('publisher_delete', '/publisher/{short_name}/delete')
 
     config.scan()
     return config.make_wsgi_app()

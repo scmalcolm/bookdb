@@ -352,10 +352,44 @@ def distributor_delete(request):
 
 
 @view_config(route_name='publisher_list', renderer='templates/publisher_list.pt')
-def view_list(request):
+def publisher_list(request):
     publishers = DBSession.query(Publisher).all()
     return dict(publishers=publishers,
                 logged_in=authenticated_userid(request),
+                edit_url=lambda pub: request.route_url('publisher_edit', short_name=pub.short_name),
+                )
+
+
+@view_config(route_name='publisher_edit', renderer='templates/publisher_edit.pt', permission='edit')
+def publisher_edit(request):
+    name = request.matchdict['short_name']
+    publisher = DBSession.query(Publisher).filter_by(short_name=name).one()
+    if 'form.submitted' in request.params:
+        publisher.short_name = request.params['short_name']
+        publisher.full_name = request.params['full_name']
+        return HTTPFound(request.route_url('publisher_list'))
+    elif 'form.delete' in request.params:
+        DBSession.delete(publisher)
+        return HTTPFound(request.route_url('publisher_list'))
+    return dict(publisher=publisher,
+                logged_in=authenticated_userid(request),
+                save_url=request.route_url('publisher_edit', short_name=name)
+                )
+
+
+@view_config(route_name='publisher_add', renderer='templates/publisher_edit.pt', permission='edit')
+def publisher_add(request):
+    if 'form.submitted' in request.params:
+        short_name = request.params['short_name']
+        full_name = request.params['full_name']
+        if full_name == '':
+            full_name = short_name
+        publisher = Publisher(short_name, full_name)
+        DBSession.add(publisher)
+        return HTTPFound(request.route_url('publisher_list'))
+    return dict(publisher=Publisher('', ''),
+                logged_in=authenticated_userid(request),
+                save_url=request.route_url('publisher_add'),
                 )
 
 

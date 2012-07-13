@@ -14,10 +14,8 @@
     </thead>
     <tbody>
       <tr tal:repeat="publisher publishers">
-        <td tal:content="publisher.short_name"></td>
+        <td><a href="${edit_url(publisher)}" tal:content="publisher.short_name" /></td>
         <td tal:content="publisher.full_name"></td>
-        <td><a href="edit">e</a></td>
-        <td><a href="delete">d</a></td>
       </tr>
     </tbody>
   </table>
