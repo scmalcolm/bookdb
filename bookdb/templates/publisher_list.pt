@@ -1,0 +1,26 @@
+<html metal:use-macro="load: master.pt">
+
+<div metal:fill-slot="top_section">
+  <b>View a List of Publishers</b>
+</div>
+
+<div metal:fill-slot="main_section">
+  <table id="book_table">
+    <thead>
+      <tr>
+        <th>Short Name</th>
+        <th>Full Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr tal:repeat="publisher publishers">
+        <td tal:content="publisher.short_name"></td>
+        <td tal:content="publisher.full_name"></td>
+        <td><a href="edit">e</a></td>
+        <td><a href="delete">d</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</html>

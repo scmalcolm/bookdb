@@ -377,6 +377,14 @@ def distributor_delete(request):
     return HTTPFound(request.route_url('distributor_list'))
 
 
+@view_config(route_name='publisher_list', renderer='templates/publisher_list.pt')
+def view_list(request):
+    publishers = DBSession.query(Publisher).all()
+    return dict(publishers=publishers,
+                logged_in=authenticated_userid(request),
+                )
+
+
 @view_config(route_name='login', renderer='templates/login.pt')
 @forbidden_view_config(renderer='templates/login.pt')
 def login(request):
