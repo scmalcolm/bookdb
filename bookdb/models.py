@@ -13,6 +13,7 @@ from sqlalchemy.orm import (
     scoped_session,
     sessionmaker,
     relationship,
+    exc as sqlexceptions,
     )
 
 from zope.sqlalchemy import ZopeTransactionExtension
@@ -54,6 +55,18 @@ class Book(Base):
     def author_string(self):
         return '; '.join([unicode(a) for a in self.authors])
 
+    @classmethod
+    def get(cls, isbn13, default=None):
+        try:
+            result = DBSession.query(Book).filter_by(isbn13=isbn13).one()
+        except sqlexceptions.NoResultFound:
+            result = default
+        return result
+
+    @classmethod
+    def list(cls):
+        return DBSession.query(Book).order_by(Book.isbn13).all()
+
 
 class Author(Base):
     __tablename__ = 'authors'
@@ -68,12 +81,13 @@ class Author(Base):
         result = []
         authors = string.split('; ')
         for a in authors:
-            try:
-                (lname, fname) = a.split(', ')
-            except:
-                lname = a
-                fname = None
-            result.append(Author(lname, fname))
+            if len(a) > 0:
+                try:
+                    (lname, fname) = a.split(', ')
+                except ValueError:
+                    lname = a
+                    fname = None
+                result.append(Author(lname, fname))
         return result
 
     @classmethod
@@ -109,6 +123,18 @@ class Order(Base):
         self.distributor = distributor
         self.shipping_method = shipping_method
         self.comment = comment
+
+    @classmethod
+    def get(cls, po, default=None):
+        try:
+            result = DBSession.query(Order).filter_by(po=po).one()
+        except sqlexceptions.NoResultFound:
+            result = default
+        return result
+
+    @classmethod
+    def list(cls):
+        return DBSession.query(Order).order_by(Order.po).all()
 
 
 class Distributor(Base):
@@ -163,11 +189,23 @@ class Distributor(Base):
             address_lines.append(self.country)
         return '\n'.join(address_lines)
 
+    @classmethod
+    def get(cls, name, default=None):
+        try:
+            result = DBSession.query(Order).filter_by(short_name=name).one()
+        except sqlexceptions.NoResultFound:
+            result = default
+        return result
+
+    @classmethod
+    def list(cls):
+        return DBSession.query(Distributor).order_by(Distributor.short_name).all()
+
 
 class Publisher(Base):
     __tablename__ = 'publishers'
     publisher_id = Column(Integer, primary_key=True)
-    short_name = Column(Text, unique=True)
+    short_name = Column(Text, unique=True, nullable=False)
     full_name = Column(Text)
 
     def __init__(self, short_name, full_name=None):
@@ -180,11 +218,23 @@ class Publisher(Base):
     def __repr__(self):
         return self.short_name
 
+    @classmethod
+    def get(cls, name, default=None):
+        try:
+            result = DBSession.query(Order).filter_by(short_name=name).one()
+        except sqlexceptions.NoResultFound:
+            result = default
+        return result
+
+    @classmethod
+    def list(cls):
+        return DBSession.query(Publisher).order_by(Publisher.short_name).all()
+
 
 class ShelfLocation(Base):
     __tablename__ = 'shelf_locations'
     location_id = Column(Integer, primary_key=True)
-    location = Column(Text, unique=True)
+    location = Column(Text, unique=True, nullable=False)
 
     def __init__(self, location):
         self.location = location
@@ -192,11 +242,23 @@ class ShelfLocation(Base):
     def __repr__(self):
         return self.location
 
+    @classmethod
+    def get(cls, location, default=None):
+        try:
+            result = DBSession.query(Order).filter_by(location=location).one()
+        except sqlexceptions.NoResultFound:
+            result = default
+        return result
+
+    @classmethod
+    def list(cls):
+        return DBSession.query(ShelfLocation).order_by(ShelfLocation.location).all()
+
 
 class Binding(Base):
     __tablename__ = 'bindings'
     binding_id = Column(Integer, primary_key=True)
-    binding = Column(Text, unique=True)
+    binding = Column(Text, unique=True, nullable=False)
 
     def __init__(self, binding):
         self.binding = binding
@@ -204,17 +266,41 @@ class Binding(Base):
     def __repr__(self):
         return self.binding
 
+    @classmethod
+    def get(cls, binding, default=None):
+        try:
+            result = DBSession.query(Order).filter_by(binding=binding).one()
+        except sqlexceptions.NoResultFound:
+            result = default
+        return result
+
+    @classmethod
+    def list(cls):
+        return DBSession.query(Binding).order_by(Binding.binding).all()
+
 
 class ShippingMethod(Base):
     __tablename__ = 'shipping_methods'
     shipping_id = Column(Integer, primary_key=True)
-    shipping_method = Column(Text, unique=True)
+    shipping_method = Column(Text, unique=True, nullable=False)
 
     def __init__(self, shipping_method):
         self.shipping_method = shipping_method
 
     def __repr__(self):
         return self.shipping_method
+
+    @classmethod
+    def get(cls, method, default=None):
+        try:
+            result = DBSession.query(Order).filter_by(shipping_method=method).one()
+        except sqlexceptions.NoResultFound:
+            result = default
+        return result
+
+    @classmethod
+    def list(cls):
+        return DBSession.query(ShippingMethod).order_by(ShippingMethod.shipping_method).all()
 
 
 class OrderEntry(Base):
@@ -229,6 +315,16 @@ class OrderEntry(Base):
         self.order = order
         self.book = book
         self.quantity = quantity
+
+    @classmethod
+    def get(cls, po, isbn13, default=None):
+        try:
+            order = DBSession.query(Order).filter_by(po=po).one()
+            book = DBSession.query(Book).filter_by(isbn13=isbn13).one()
+            result = DBSession.query(OrderEntry).filter_by(order=order, book=book).one()
+        except sqlexceptions.NoResultFound:
+            result = default
+        return result
 
 
 class RootFactory(object):
