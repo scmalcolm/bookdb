@@ -75,11 +75,10 @@ class Author(Base):
                 fname = None
             result.append(Author(lname, fname))
         return result
-        #return [a for a in map(lambda(x): x.split(', '), string.split('; '))]
 
     @classmethod
     def create_author_string(cls, authors):
-        return u'; '.join(map(lambda(x): ', '.join(x.lastname, x.firstname), authors))
+        return u'; '.join(map(lambda x: ', '.join(x.lastname, x.firstname), authors))
 
     def __init__(self, lastname, firstname=None):
         self.lastname = lastname
