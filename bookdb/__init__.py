@@ -3,6 +3,7 @@ from sqlalchemy import engine_from_config
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from bookdb.security import groupfinder
+from pyramid.settings import asbool
 
 from .models import DBSession
 
@@ -14,6 +15,8 @@ def main(global_config, **settings):
     DBSession.configure(bind=engine)
     authn_policy = AuthTktAuthenticationPolicy('sosecret', callback=groupfinder)
     authz_policy = ACLAuthorizationPolicy()
+    develop = asbool(settings.get('develop', 'false'))
+    settings['develop'] = develop
     config = Configurator(settings=settings,
                           root_factory='bookdb.models.RootFactory')
     config.set_authentication_policy(authn_policy)

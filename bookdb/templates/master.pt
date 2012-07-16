@@ -32,6 +32,9 @@
     <div id="middle">
       <div class="middle align-right">
         <div id="left" class="app-welcome align-left">
+          <p class="warn" tal:condition="theme.develop">
+            Development Version! Do not use for real work!
+          </p>
           
 <span metal:define-slot="top_section">
 <!-- PAGE TITLE-->
@@ -39,7 +42,7 @@
 
         </div>
         <div id="right" class="app-welcome align-right">
-          <span tal:condition="logged_in">
+          <span tal:condition="theme.logged_in">
             <a href="${request.application_url}/logout">Logout</a>
           </span>
         </div>
