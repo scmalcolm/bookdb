@@ -194,7 +194,7 @@ def order_add(request):
                 )
 
 
-@view_config(route_name='order_edit', renderer='templates/edit_order.pt', permission='edit')
+@view_config(route_name='order_edit', renderer='templates/order_edit.pt', permission='edit')
 def order_edit(request):
     po = request.matchdict['po']
     order = DBSession.query(Order).filter_by(po=po).one()
