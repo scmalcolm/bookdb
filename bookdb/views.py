@@ -351,7 +351,7 @@ def distributor_delete(request):
 
 @view_config(route_name='publisher_list', renderer='templates/publisher_list.pt')
 def publisher_list(request):
-    publishers = DBSession.query(Publisher).all()
+    publishers = DBSession.query(Publisher).order_by(Publisher.short_name).all()
     return dict(theme=Theme(request),
                 publishers=publishers,
                 edit_url=lambda pub: request.route_url('publisher_edit', short_name=pub.short_name),
