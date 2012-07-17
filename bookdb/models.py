@@ -23,8 +23,20 @@ from pyramid.security import (
     Everyone,
     )
 
+import re
+
+ISBN13_REGEX = re.compile("^\d{13}$")
+
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
+
+
+def valid_isbn13(isbn13):
+    if ISBN13_REGEX.match(isbn13) is None:
+        return False
+    total = sum([int(num) * weight for num, weight in zip(isbn13, (1, 3) * 6)])
+    ck = (10 - (total % 10)) % 10
+    return ck == int(isbn13[-1])
 
 
 class Book(Base):
