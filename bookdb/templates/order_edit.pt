@@ -13,29 +13,17 @@
       </label>
       
       <label>Distributor
-        <select name="distributor">
-          <option tal:repeat="distributor distributors"
-              tal:attributes="selected 'selected' if
-               distributor is order.distributor else None">
-            <span tal:replace="distributor">Distribution Company</span>
-          </option>
-        </select>
+        <input name="distributor" list="dist" value="${order.distributor}"/>
       </label>
-      
-      <!--label>Shipping Methods
-        <select name="shipping_method">
-          <option tal:repeat="method shipping_methods"
-            tal:attributes="selected 'selected' if method is order.shipping_method else None">
-            <span tal:replace="method">Ship by Tortise</span>
-          </option>
-        </select>
-      </label-->
+      <datalist id="dist">
+        <option tal:repeat="distributor distributors" value="${distributor}" />
+      </datalist>
+
       <label>Shipping Method
         <input name="shipping_method" list="ship" value="${order.shipping_method}"/>
       </label>
       <datalist id="ship">
-        <option tal:repeat="method shipping_methods"
-          value="${method}" />
+        <option tal:repeat="method shipping_methods" value="${method}" />
       </datalist>
       
       <label>Date

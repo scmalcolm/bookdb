@@ -7,26 +7,35 @@
 <div metal:fill-slot="main_section">
   <div class="order-header">
   <form action="${save_url}" method="post">
-    <label>PO <input name="po" type="text" value="" autofocus="autofocus" /></label>
+    <label>PO
+      <input name="po" type="text" value="" autofocus="autofocus" />
+    </label>
+
     <label>Distributor
-      <select name="distributor">
-        <option tal:repeat="distributor distributors">
-          <span tal:replace="distributor">Distribution Company</span>
-        </option>
-      </select>
+      <input name="distributor" list="dist" value="" />
     </label>
+    <datalist id="dist">
+      <option tal:repeat="distributor distributors" value="${distributor}" />
+    </datalist>
+    
     <label>Shipping Method
-      <select name="shipping_method">
-        <option tal:repeat="method shipping_methods">
-          <span tal:replace="method">Ship by Tortise</span>
-        </option>
-      </select>
+      <input name="shipping_method" list="ship" value="" />
     </label>
-    <label>Date <input name="order_date" type="date" value="" /></label>
-    <label>Special Instructions <input name="comment" type="text" value="" /></label>
-    <input name="form.submitted" type="submit" method="save" value="Save Order Header" />
+    <datatable id="ship">
+      <option tal:repeat="method shipping_methods" value="${method}" />
+    </datatable>
+
+    <label>Date
+      <input name="order_date" type="date" value="" />
+    </label>
+
+    <label>Special Instructions
+      <input name="comment" type="text" value="" />
+    </label>
+
+    <input name="form.submitted" type="submit" method="save" value="Save" />
   </form>
-</div>
+  </div>
 </div>
 
 </html>

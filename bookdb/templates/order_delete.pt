@@ -26,7 +26,7 @@
       <input type="text" value="${order.comment}" readonly="readonly" />
     </label>
 
-    <input name="form.submitted" type="submit" method="save" value="Delete this Order!" /> 
+    <input name="form.submitted" type="submit" method="save" value="Delete" /> 
   </form>
   <div class="order-entries">
     <table>

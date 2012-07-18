@@ -19,31 +19,25 @@
     </label>
     
     <label>Publisher
-      <select id="publisher" name="publisher">
-        <option tal:repeat="pub publishers"
-          tal:attributes="selected 'selected' if pub is book.publisher else None">
-          <span tal:replace="pub">Publisher Name</span>
-        </option>
-      </select>
+      <input name="publisher" list="publishers" value="${book.publisher}" />
     </label>
+    <datalist id="publishers">
+      <option tal:repeat="pub publishers" value="${pub}" />
+    </datalist>
     
     <label>Binding
-      <select id="binding" name="binding">
-        <option tal:repeat="bind bindings"
-          tal:attributes="selected 'selected' if bind is book.binding else None">
-          <span tal:replace="bind">Binding</span>
-        </option>
-      </select>
+      <input name="binding" list="bindings" value="${book.binding}" />
     </label>
+    <datalist id="binding">
+      <option tal:repeat="bind bindings" value="${bind}" />
+    </datalist>
     
     <label>Location
-      <select id="location" name="shelf_location">
-        <option tal:repeat="loc locations"
-          tal:attributes="selected 'selected' if loc is book.shelf_location else None">
-          <span tal:replace="loc">Shelf Location</span>
-        </option>
-      </select>
+      <input name="shelf_location" list="locations" value="${book.shelf_location}" />
     </label>
+    <datalist id="locations">
+      <option tal:repeat="loc locations" value="${loc}" />
+    </datalist>
     
     <input type="submit" name="form.submitted" value="Save" />
   </form>
