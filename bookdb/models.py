@@ -204,7 +204,7 @@ class Distributor(Base):
     @classmethod
     def get(cls, name, default=None):
         try:
-            result = DBSession.query(Order).filter_by(short_name=name).one()
+            result = DBSession.query(Distributor).filter_by(short_name=name).one()
         except sqlexceptions.NoResultFound:
             result = default
         return result
@@ -233,7 +233,7 @@ class Publisher(Base):
     @classmethod
     def get(cls, name, default=None):
         try:
-            result = DBSession.query(Order).filter_by(short_name=name).one()
+            result = DBSession.query(Publisher).filter_by(short_name=name).one()
         except sqlexceptions.NoResultFound:
             result = default
         return result
@@ -257,7 +257,7 @@ class ShelfLocation(Base):
     @classmethod
     def get(cls, location, default=None):
         try:
-            result = DBSession.query(Order).filter_by(location=location).one()
+            result = DBSession.query(ShelfLocation).filter_by(location=location).one()
         except sqlexceptions.NoResultFound:
             result = default
         return result
@@ -281,7 +281,7 @@ class Binding(Base):
     @classmethod
     def get(cls, binding, default=None):
         try:
-            result = DBSession.query(Order).filter_by(binding=binding).one()
+            result = DBSession.query(Binding).filter_by(binding=binding).one()
         except sqlexceptions.NoResultFound:
             result = default
         return result
@@ -305,7 +305,7 @@ class ShippingMethod(Base):
     @classmethod
     def get(cls, method, default=None):
         try:
-            result = DBSession.query(Order).filter_by(shipping_method=method).one()
+            result = DBSession.query(ShippingMethod).filter_by(shipping_method=method).one()
         except sqlexceptions.NoResultFound:
             result = default
         return result
