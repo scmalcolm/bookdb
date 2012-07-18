@@ -27,6 +27,7 @@ from .models import (
     ShippingMethod,
     Distributor,
     Author,
+    valid_isbn13,
     )
 
 from .printing import generate_order_pdf
@@ -66,11 +67,22 @@ def book_add(request):
         # TODO: validate data
         new_book = Book(isbn13, title, publisher, binding, shelf_location, authors=authors)
         DBSession.add(new_book)
-        return HTTPFound(location=request.route_url('book_add'))
-    book = Book('', '', '', '', '', [])
+        if 'from-order' in request.params:
+            po = request.params['from-order']
+            return HTTPFound(location=request.route_url('order_edit', po=po, _query={'new-book': isbn13}))
+        else:
+            return HTTPFound(location=request.route_url('book_add'))
+    if 'from-order' in request.params:
+        po = request.params['from-order']
+        isbn13 = request.params['isbn13']
+        book = Book(isbn13, '', '', '', '', [])
+        save_url = request.route_url('book_add', _query={'from-order': po})
+    else:
+        book = Book('', '', '', '', '', [])
+        save_url = request.route_url('book_add')
     return dict(theme=Theme(request),
                 book=book,
-                save_url=request.route_url('book_add'),
+                save_url=save_url,
                 bindings=Binding.list(),
                 locations=ShelfLocation.list(),
                 publishers=Publisher.list(),
@@ -175,6 +187,9 @@ def order_edit(request):
     po = request.matchdict['po']
     order = Order.get(po)
     message = ''
+    newisbn = ''
+    if 'new-book' in request.params:
+        newisbn = request.params['new-book']
     if 'header.submitted' in request.params:
         po = request.params['po']
         order_date = parse_date(request.params['order_date'])
@@ -196,9 +211,10 @@ def order_edit(request):
             assert quantity > 0
         except (AssertionError, ValueError):
             quantity = None
-        if book is None:
-            # TODO: prompt for insertion of new book
-            message = "No book with ISBN: {}!".format(isbn13)
+        if not valid_isbn13(isbn13):
+            message = "ISBN: {} is not valid!".format(isbn13)
+        elif book is None:
+            return HTTPFound(location=request.route_url('book_add', _query={'from-order': po, 'isbn13': isbn13}))
         elif quantity is None:
             message = "Quantity ({}) must be a positive integer!".format(quantity)
         else:
@@ -207,6 +223,7 @@ def order_edit(request):
     return dict(theme=Theme(request),
                 order=order,
                 message=message,
+                newisbn=newisbn,
                 save_url=request.route_url('order_edit', po=po),
                 shipping_methods=ShippingMethod.list(),
                 distributors=Distributor.list(),

@@ -22,14 +22,21 @@
         </select>
       </label>
       
-      <label>Shipping Method
+      <!--label>Shipping Methods
         <select name="shipping_method">
           <option tal:repeat="method shipping_methods"
             tal:attributes="selected 'selected' if method is order.shipping_method else None">
             <span tal:replace="method">Ship by Tortise</span>
           </option>
         </select>
+      </label-->
+      <label>Shipping Method
+        <input name="shipping_method" list="ship" value="${order.shipping_method}"/>
       </label>
+      <datalist id="ship">
+        <option tal:repeat="method shipping_methods"
+          value="${method}" />
+      </datalist>
       
       <label>Date
         <input name="order_date" type="date" value="${order.date}" />
@@ -67,7 +74,7 @@
         <form action="${save_url}" method="post">
         <tr>
           <td>
-            <input name="isbn13" type="text" maxlength="13" autofocus="autofocus" />
+            <input name="isbn13" type="text" maxlength="13" autofocus="autofocus" value="${newisbn}"/>
           </td>
           
           <td>
