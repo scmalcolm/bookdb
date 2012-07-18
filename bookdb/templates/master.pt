@@ -19,44 +19,34 @@
         type="text/css" media="screen" charset="utf-8" />
   <![endif]-->
 </head>
-<body>
-  <div id="wrap">
-    <div id="top-small">
-      <div class="top-small align-center">
-        <div>
-          <img width="220" height="50" alt="pyramid"
+<body> 
+  <header role="banner">
+    <div>
+      <img class="logo" width="220" height="50" alt="pyramid"
         src="${request.static_url('bookdb:static/pyramid-small.png')}" />
-        </div>
-      </div>
-    </div>
-    <div id="middle">
-      <div class="middle align-right">
-        <div id="left" class="app-welcome align-left">
-          <p class="warn" tal:condition="theme.develop">
-            Development Version! Do not use for real work!
-          </p>
-          
+      <p class="warn" tal:condition="theme.develop">
+        Development Version! Do not use for real work!
+      </p>
+      <div class="page-title">
+
 <span metal:define-slot="top_section">
 <!-- PAGE TITLE-->
 </span>
 
-        </div>
-        <div id="right" class="app-welcome align-right">
-          <span tal:condition="theme.logged_in">
-            <a href="${request.application_url}/logout">Logout</a>
-          </span>
-        </div>
+      </div>
+      <div class="authentication-controls">
+        <span tal:condition="theme.logged_in">
+          <a href="${request.application_url}/logout">Logout</a>
+        </span>
       </div>
     </div>
-    <div id="bottom">
-      <div class="bottom">
+  </header>
+  <div class="main">
         
 <span metal:define-slot="main_section">
 <!-- PAGE CONTENT -->
 </span>
         
-      </div>
-    </div>
   </div>
 </body>
 </html>
