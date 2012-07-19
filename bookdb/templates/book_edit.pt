@@ -26,9 +26,9 @@
     </datalist>
     
     <label>Binding
-      <input name="binding" list="bindings" value="${book.binding}" />
+      <input name="binding" list="bind" value="${book.binding}" />
     </label>
-    <datalist id="binding">
+    <datalist id="bind">
       <option tal:repeat="bind bindings" value="${bind}" />
     </datalist>
     
