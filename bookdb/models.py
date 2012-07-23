@@ -62,7 +62,10 @@ class Book(Base):
         self.authors = authors
 
     def author_lastname(self):
-        return self.authors[0].lastname
+        if self.authors == []:
+            return ''
+        else:
+            return self.authors[0].lastname
 
     def author_string(self):
         return '; '.join([unicode(a) for a in self.authors])
