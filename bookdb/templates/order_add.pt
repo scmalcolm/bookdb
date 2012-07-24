@@ -21,9 +21,9 @@
     <label>Shipping Method
       <input name="shipping_method" list="ship" value="" />
     </label>
-    <datatable id="ship">
+    <datalist id="ship">
       <option tal:repeat="method shipping_methods" value="${method}" />
-    </datatable>
+    </datalist>
 
     <label>Date
       <input name="order_date" type="date" value="" />
