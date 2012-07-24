@@ -195,7 +195,7 @@ class Distributor(Base):
         address_lines = [self.full_name]
         if self.address1 is not None:
             address_lines.append(self.address1)
-        if self.address2 is not None:
+        if self.address2 is not None and self.address2 != '':
             address_lines.append(self.address2)
         city_line = ' '.join([x for x in (self.city, self.province, self.postal_code) if x is not None])
         if city_line is not None and city_line != '':
