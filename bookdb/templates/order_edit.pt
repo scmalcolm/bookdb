@@ -9,18 +9,18 @@
   <div class="order-header">
     <form action="${save_url}" method="post">
       <label>PO
-        <input name="po" type="text" value="${order.po}" />
+        <input name="po" type="text" value="${order.po}" autocomplete="off" />
       </label>
       
       <label>Distributor
-        <input name="distributor" list="dist" value="${order.distributor}"/>
+        <input name="distributor" list="dist" value="${order.distributor}" autocomplete="off" />
       </label>
       <datalist id="dist">
         <option tal:repeat="distributor distributors" value="${distributor}" />
       </datalist>
 
       <label>Shipping Method
-        <input name="shipping_method" list="ship" value="${order.shipping_method}"/>
+        <input name="shipping_method" list="ship" value="${order.shipping_method}" autocomplete="off" />
       </label>
       <datalist id="ship">
         <option tal:repeat="method shipping_methods" value="${method}" />
@@ -31,7 +31,7 @@
       </label>
       
       <label>Special Instructions
-        <input name="comment" type="text" value="${order.comment}" />
+        <input name="comment" type="text" value="${order.comment}" autocomplete="off" />
       </label>
 
       <input name="header.submitted" type="submit" method="save" value="Save Order Header" />
@@ -62,11 +62,11 @@
         <form action="${save_url}" method="post">
         <tr>
           <td>
-            <input name="isbn13" type="text" maxlength="13" autofocus="autofocus" value="${newisbn}"/>
+            <input name="isbn13" type="text" maxlength="13" autofocus="autofocus" value="${newisbn}" autocomplete="off" />
           </td>
           
           <td>
-            <input name="quantity" type="text" />
+            <input name="quantity" type="text" autocomplete="off" />
           </td>
           
           <td>

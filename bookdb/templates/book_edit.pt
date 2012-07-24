@@ -7,33 +7,33 @@
 <div metal:fill-slot="main_section">
   <form action="${save_url}" method="post">
     <label>ISBN
-      <input name="isbn13" type="text" value="${book.isbn13}" autofocus="autofocus" />
+      <input name="isbn13" type="text" value="${book.isbn13}" autofocus="autofocus" autocomplete="off" />
     </label>
     
     <label>Title
-      <input name="title" type="text" value="${book.title}" />
+      <input name="title" type="text" value="${book.title}" autocomplete="off" />
     </label>
     
     <label>Author
-      <input name="author_string" type="text" value="${book.author_string()}" />
+      <input name="author_string" type="text" value="${book.author_string()}" autocomplete="off" />
     </label>
     
     <label>Publisher
-      <input name="publisher" list="publishers" value="${book.publisher}" />
+      <input name="publisher" list="publishers" value="${book.publisher}" autocomplete="off" />
     </label>
     <datalist id="publishers">
       <option tal:repeat="pub publishers" value="${pub}" />
     </datalist>
     
     <label>Binding
-      <input name="binding" list="bind" value="${book.binding}" />
+      <input name="binding" list="bind" value="${book.binding}" autocomplete="off" />
     </label>
     <datalist id="bind">
       <option tal:repeat="bind bindings" value="${bind}" />
     </datalist>
     
     <label>Location
-      <input name="shelf_location" list="locations" value="${book.shelf_location}" />
+      <input name="shelf_location" list="locations" value="${book.shelf_location}" autocomplete="off" />
     </label>
     <datalist id="locations">
       <option tal:repeat="loc locations" value="${loc}" />

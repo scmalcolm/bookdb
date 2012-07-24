@@ -7,11 +7,11 @@
 <div metal:fill-slot="main_section">
   <form action="${save_url}" method="post">
     <label>Short Name
-      <input name="short_name" type="text" value="${publisher.short_name}" autofocus="autofocus" />
+      <input name="short_name" type="text" value="${publisher.short_name}" autofocus="autofocus" autocomplete="off" />
     </label>
     
     <label>Full Name
-      <input name="full_name" type="text" value="${publisher.full_name}" />
+      <input name="full_name" type="text" value="${publisher.full_name}" autocomplete="off" />
     </label>
     
     <input type="submit" name="form.submitted" value="Save" />

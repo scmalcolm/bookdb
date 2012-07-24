@@ -7,55 +7,55 @@
 <div metal:fill-slot="main_section">
   <form action="${save_url}" method="post">
     <label>Short Name
-      <input name="short_name" type="text" value="${distributor.short_name}" />
+      <input name="short_name" type="text" value="${distributor.short_name}" autocomplete="off" />
     </label>
     
     <label>Full Name
-      <input name="full_name" type="text" value="${distributor.full_name}" />
+      <input name="full_name" type="text" value="${distributor.full_name}" autocomplete="off" />
     </label>
     
     <label>Account Number
-      <input name="account_number" type="text" value="${distributor.account_number}" />
+      <input name="account_number" type="text" value="${distributor.account_number}" autocomplete="off" />
     </label>
     
     <label>Phone
-      <input name="phone" type="text" value="${distributor.phone}" />
+      <input name="phone" type="text" value="${distributor.phone}" autocomplete="off" />
     </label>
     
     <label>Fax
-      <input name="fax" type="text" value="${distributor.fax}" />
+      <input name="fax" type="text" value="${distributor.fax}" autocomplete="off" />
     </label>
     
     <label>Email
-      <input name="email" type="text" value="${distributor.email}" />
+      <input name="email" type="text" value="${distributor.email}" autocomplete="off" />
     </label>
 
     <label>Address Line 1
-      <input name="address1" type="text" value="${distributor.address1}" />
+      <input name="address1" type="text" value="${distributor.address1}" autocomplete="off" />
     </label>
 
     <label>Address Line 2
-      <input name="address2" type="text" value="${distributor.address2}" />
+      <input name="address2" type="text" value="${distributor.address2}" autocomplete="off" />
     </label>
 
     <label>City
-      <input name="city" type="text" value="${distributor.city}" />
+      <input name="city" type="text" value="${distributor.city}" autocomplete="off" />
     </label>
 
     <label>Province
-      <input name="province" type="text" value="${distributor.province}" />
+      <input name="province" type="text" value="${distributor.province}" autocomplete="off" />
     </label>
 
     <label>Postal Code
-      <input name="postal_code" type="text" value="${distributor.postal_code}" />
+      <input name="postal_code" type="text" value="${distributor.postal_code}" autocomplete="off" />
     </label>
 
     <label>Country
-      <input name="country" type="text" value="${distributor.country}" />
+      <input name="country" type="text" value="${distributor.country}" autocomplete="off" />
     </label>
 
     <label>Sales Rep
-      <input name="sales_rep" type="text" value="${distributor.sales_rep}" />
+      <input name="sales_rep" type="text" value="${distributor.sales_rep}" autocomplete="off" />
     </label>
     
     <input type="submit" name="form.submitted" value="Save" />

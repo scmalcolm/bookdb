@@ -8,18 +8,18 @@
   <div class="order-header">
   <form action="${save_url}" method="post">
     <label>PO
-      <input name="po" type="text" value="" autofocus="autofocus" />
+      <input name="po" type="text" value="" autofocus="autofocus" autocomplete="off" />
     </label>
 
     <label>Distributor
-      <input name="distributor" list="dist" value="" />
+      <input name="distributor" list="dist" value="" autocomplete="off" />
     </label>
     <datalist id="dist">
       <option tal:repeat="distributor distributors" value="${distributor}" />
     </datalist>
     
     <label>Shipping Method
-      <input name="shipping_method" list="ship" value="" />
+      <input name="shipping_method" list="ship" value="" autocomplete="off" />
     </label>
     <datalist id="ship">
       <option tal:repeat="method shipping_methods" value="${method}" />
@@ -30,7 +30,7 @@
     </label>
 
     <label>Special Instructions
-      <input name="comment" type="text" value="" />
+      <input name="comment" type="text" value="" autocomplete="off" />
     </label>
 
     <input name="form.submitted" type="submit" method="save" value="Save" />
