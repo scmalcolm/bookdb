@@ -42,9 +42,9 @@ def valid_isbn13(isbn13):
 class Book(Base):
     __tablename__ = 'books'
     book_id = Column(Integer, primary_key=True)
-    binding_id = Column(Integer, ForeignKey('bindings.binding_id'))
-    location_id = Column(Integer, ForeignKey('shelf_locations.location_id'))
-    publisher_id = Column(Integer, ForeignKey('publishers.publisher_id'))
+    binding_id = Column(Integer, ForeignKey('bindings.binding_id'), nullable=False)
+    location_id = Column(Integer, ForeignKey('shelf_locations.location_id'), nullable=False)
+    publisher_id = Column(Integer, ForeignKey('publishers.publisher_id'), nullable=False)
     isbn13 = Column(String(13), unique=True)
     title = Column(String)
     author_name = Column(String)  # use format 'last1, first1; last2, first2; ...'
@@ -123,8 +123,8 @@ class Author(Base):
 class Order(Base):
     __tablename__ = 'orders'
     order_id = Column(Integer, primary_key=True)
-    distributor_id = Column(Integer, ForeignKey('distributors.distributor_id'))
-    shipping_id = Column(Integer, ForeignKey('shipping_methods.shipping_id'))
+    distributor_id = Column(Integer, ForeignKey('distributors.distributor_id'), nullable=False)
+    shipping_id = Column(Integer, ForeignKey('shipping_methods.shipping_id'), nullable=False)
     po = Column(String, unique=True)
     date = Column(Date)
     comment = Column(Text)
