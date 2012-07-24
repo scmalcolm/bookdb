@@ -1,5 +1,7 @@
 from dateutil.parser import parse as parse_date
 
+import os
+
 from pyramid.httpexceptions import (
     HTTPFound,
     HTTPNotFound,
@@ -8,7 +10,7 @@ from pyramid.view import (
     view_config,
     forbidden_view_config,
     )
-from pyramid.renderers import get_renderer
+from pyramid.response import FileResponse
 
 from pyramid.security import (
     remember,
@@ -158,9 +160,11 @@ def order_view(request):
 def order_pdf(request):
     po = request.matchdict['po']
     order = Order.get(po)
-    filename = '/Users/bmbr/Orders/{}.pdf'.format(po)
+    here = os.path.dirname(__file__)
+    filename = os.path.join(here, 'orders', '{}.pdf'.format(po))
     generate_order_pdf(order, filename)
-    return HTTPFound(location=request.route_url('order_view', po=po))
+    # return HTTPFound(location=request.route_url('order_view', po=po))
+    return FileResponse(filename, request=request)
 
 
 @view_config(route_name='order_add', renderer='templates/order_add.pt', permission='edit')
