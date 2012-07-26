@@ -161,7 +161,10 @@ def order_pdf(request):
     po = request.matchdict['po']
     order = Order.get(po)
     here = os.path.dirname(__file__)
-    filename = os.path.join(here, 'orders', '{}.pdf'.format(po))
+    if request.registry.settings['develop']:
+        filename = os.path.join(here, 'orders', '{}.pdf'.format(po))
+    else:
+        filename = '/Users/bmbr/Orders/{}.pdf'.format(po)
     generate_order_pdf(order, filename)
     # return HTTPFound(location=request.route_url('order_view', po=po))
     return FileResponse(filename, request=request)
