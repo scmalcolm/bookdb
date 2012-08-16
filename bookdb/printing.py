@@ -1,6 +1,6 @@
 from reportlab.lib import pagesizes
 from reportlab.pdfgen import canvas
-from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Table, NextPageTemplate, Paragraph, TableStyle
+from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Table, NextPageTemplate, Paragraph, TableStyle, Spacer
 from reportlab.lib.styles import StyleSheet1, ParagraphStyle
 from reportlab.lib.units import cm
 
@@ -87,6 +87,7 @@ def generate_order_pdf(order, filename=_default_filename):
     else:
         plural = ''
 
+    story.append(Spacer(1, 1 * cm))
     story.append(Paragraph("ATTENTION: ORDER DEPARTMENT", styleN))
     story.append(Paragraph("<i>Special Instructions</i>:<b>" + order.comment + "</b>", styleN))
     story.append(Paragraph('<i>Please send the following title' + plural + ':</i>', styleN))
